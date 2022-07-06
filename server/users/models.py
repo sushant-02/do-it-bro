@@ -1,15 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
+from haikunator import Haikunator
 
-class CustomUserManager(BaseUserManager):
+
+class UserManager(BaseUserManager):
   """Define a model manager for User model with no username field."""
 
   def _create_user(self, email, password=None, **extra_fields):
     """Create and save a User with the given email and password."""
     if not email:
-      raise ValueError('The given email must be set')
+      raise ValueError('Email is required.')
+
     email = self.normalize_email(email)
+    extra_fields.setdefault('first_name', Haikunator.haikunate(0, ' '))
     user = self.model(email=email, **extra_fields)
     user.set_password(password)
     user.save(using=self._db)
@@ -33,11 +37,27 @@ class CustomUserManager(BaseUserManager):
     return self._create_user(email, password, **extra_fields)
 
 
-class CustomUser(AbstractUser):
+class User(AbstractUser):
   username = None
   email = models.EmailField(unique=True)
 
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = []
 
-  objects = CustomUserManager()
+  objects = UserManager()
+
+  class Meta:
+    verbose_name = 'User'
+    verbose_name_plural = 'Users'
+
+
+class UserOTPs(models.Model):
+  email = models.EmailField(unique=True)
+  otp = models.CharField(max_length=6, verbose_name='OTP')
+
+  class Meta:
+    verbose_name = 'User OTP'
+    verbose_name_plural = 'User OTPs'
+
+  def __str__(self) -> str:
+    return f'{self.email}'

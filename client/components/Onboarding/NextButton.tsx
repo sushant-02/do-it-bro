@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -10,8 +10,9 @@ import {
 import Svg, { G, Circle } from "react-native-svg";
 import { AntDesign } from "@expo/vector-icons";
 import { Input, Button } from "@rneui/themed";
-
 import { Entypo } from "@expo/vector-icons";
+
+import { validate } from "../../constants/validators";
 
 const { width } = Dimensions.get("window");
 
@@ -21,20 +22,24 @@ interface NextButtonProps {
   showEmailForm: boolean;
 }
 
+const size = 100;
+const strokeWidth = 2;
+const center = size / 2;
+const radius = size / 2 - strokeWidth / 2;
+const circumference = 2 * Math.PI * radius;
+
 const NextButton: React.FC<NextButtonProps> = ({
   percentage,
   scrollTo,
   showEmailForm,
 }) => {
-  const size = 100;
-  const strokeWidth = 2;
-  const center = size / 2;
-  const radius = size / 2 - strokeWidth / 2;
-  const circumference = 2 * Math.PI * radius;
+  const [email, setEmail] = useState<any>("");
+  const [errorMessage, setErrorMessage] = useState<any>("");
 
   const progressAnimation = useRef(new Animated.Value(0)).current;
   const progressRef = useRef<any>(null);
   const scrollViewRef = useRef<any>(null);
+  const inputRef = useRef<any>(null);
 
   const animation = (toValue: number) => {
     return Animated.timing(progressAnimation, {
@@ -68,6 +73,21 @@ const NextButton: React.FC<NextButtonProps> = ({
   if (showEmailForm) {
     scrollViewRef?.current?.scrollToEnd({ animated: true });
   }
+
+  const onFormSubmit = () => {
+    if (!validate(email)) {
+      if (inputRef.current) {
+        inputRef.current.shake();
+        setErrorMessage("Please enter a valid email.");
+      } else {
+        alert("Please enter a valid email.");
+      }
+      return;
+    }
+
+    setErrorMessage("");
+    alert("Good job");
+  };
 
   return (
     <ScrollView
@@ -109,6 +129,7 @@ const NextButton: React.FC<NextButtonProps> = ({
       </View>
       <View style={styles.emailContainer}>
         <Input
+          ref={inputRef}
           containerStyle={{
             width: "80%",
           }}
@@ -116,13 +137,16 @@ const NextButton: React.FC<NextButtonProps> = ({
           style={{ fontSize: 15 }}
           leftIcon={<Entypo name="email" size={20} color="black" />}
           leftIconContainerStyle={{ marginRight: 10 }}
+          defaultValue={email}
+          onChangeText={(newVal) => setEmail(newVal)}
+          errorMessage={errorMessage}
+          keyboardType={"email-address"}
         />
         <Button
           containerStyle={{
             width: "100%",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: -10,
           }}
           title="Get OTP"
           titleStyle={{ fontSize: 15 }}
@@ -131,6 +155,7 @@ const NextButton: React.FC<NextButtonProps> = ({
             backgroundColor: "#4756DF",
             borderRadius: 5,
           }}
+          onPress={onFormSubmit}
         />
       </View>
     </ScrollView>

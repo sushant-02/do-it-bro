@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 		fontSize: 35,
 		fontWeight: '800',
 		marginBottom: 10,
-		color: '#493d8a',
+		color: '#000',
 		textAlign: 'center',
 	},
 	subtitle: {

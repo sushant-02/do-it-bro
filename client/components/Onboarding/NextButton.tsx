@@ -5,7 +5,6 @@ import {
 	ScrollView,
 	View,
 	Animated,
-	Text,
 	Dimensions,
 } from 'react-native';
 import Svg, { G, Circle } from 'react-native-svg';
@@ -125,7 +124,7 @@ const NextButton: React.FC<NextButtonProps> = ({
 					titleStyle={{ fontSize: 20 }}
 					buttonStyle={{
 						width: '75%',
-						backgroundColor: 'grey',
+						backgroundColor: '#4756DF',
 						borderRadius: 5,
 					}}
 				/>

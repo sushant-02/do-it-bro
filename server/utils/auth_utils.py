@@ -1,6 +1,7 @@
 import random
 from decouple import config
 from django.core.mail import send_mail
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from utils.otp_email_template import get_html_email_template
 
@@ -21,3 +22,12 @@ def send_otp_to_email(recipient_email, otp):
     recipient_list=[recipient_email, ],
     fail_silently=False,
   )
+
+
+def get_tokens_for_user(user):
+  refresh = RefreshToken.for_user(user)
+
+  return {
+    'refresh': str(refresh),
+    'access': str(refresh.access_token),
+  }

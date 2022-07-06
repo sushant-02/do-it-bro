@@ -224,6 +224,7 @@ export default function HomeScreen() {
         <FlatList
           horizontal={true}
           scrollEnabled={false}
+          showsHorizontalScrollIndicator={false}
           data={[
             ...projects.slice(0, 2),
             {

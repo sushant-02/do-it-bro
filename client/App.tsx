@@ -1,25 +1,23 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { SafeAreaProvider } from "react-native-safe-area-context";
-
-import AuthScreen from "./screens/AuthScreen";
+import StartScreen from './screens/StartScreen';
 
 export default function App() {
-  return (
-    <SafeAreaProvider>
-      <View style={styles.container}>
-        <AuthScreen />
-      </View>
-    </SafeAreaProvider>
-  );
+	return (
+		<SafeAreaProvider>
+			<View style={styles.container}>
+				<StartScreen />
+			</View>
+		</SafeAreaProvider>
+	);
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center",
-  },
+	container: {
+		flex: 1,
+		// backgroundColor: '#fff',
+		// alignItems: "center",
+		// justifyContent: "center",
+	},
 });

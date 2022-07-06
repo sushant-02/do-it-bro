@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 import Svg, { G, Circle } from 'react-native-svg';
 import { AntDesign } from '@expo/vector-icons';
+import { Input, Button } from '@rneui/themed';
+
+import { Entypo } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -105,8 +108,27 @@ const NextButton: React.FC<NextButtonProps> = ({
 					<AntDesign name='arrowright' size={32} color='#fff' />
 				</TouchableOpacity>
 			</View>
-			<View style={{ width }}>
-				<Text>Email here</Text>
+			<View style={styles.emailContainer}>
+				<Input
+					containerStyle={{ width: '80%' }}
+					placeholder='Enter your Email'
+					leftIcon={<Entypo name='email' size={24} color='black' />}
+					leftIconContainerStyle={{ marginRight: 10 }}
+				/>
+				<Button
+					containerStyle={{
+						width: '100%',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+					title='Get OTP'
+					titleStyle={{ fontSize: 20 }}
+					buttonStyle={{
+						width: '75%',
+						backgroundColor: 'grey',
+						borderRadius: 5,
+					}}
+				/>
 			</View>
 		</ScrollView>
 	);
@@ -127,6 +149,11 @@ const styles = StyleSheet.create({
 		backgroundColor: '#f4338f',
 		borderRadius: 100,
 		padding: 20,
+	},
+	emailContainer: {
+		width: width,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });
 

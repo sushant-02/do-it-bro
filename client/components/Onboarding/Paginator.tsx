@@ -49,8 +49,10 @@ const Paginator: React.FC<PaginatorProps> = ({ data, scrollX }) => {
 
 const styles = StyleSheet.create({
 	container: {
-		height: 64,
+		height: 20,
+		marginTop: 10,
 		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	dot: {
 		height: 10,

@@ -39,7 +39,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ title, status }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity activeOpacity={0.7} style={styles.container}>
       <View>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.date}>9:00 AM - 10:30 PM</Text>

@@ -101,19 +101,7 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  tabBarStyle: {
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    backgroundColor: "pink",
-  },
-});
+const styles = StyleSheet.create({});
 
 // shadowColor: "#00000059",
 // shadowOffset: { width: 0, height: 5 },

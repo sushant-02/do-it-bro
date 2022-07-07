@@ -31,7 +31,7 @@ const Onboarding = () => {
 
 	return (
 		<View style={styles.container}>
-			<View style={{ flex: 4 }}>
+			<View style={{ flex: 8 }}>
 				<FlatList
 					ref={slidesRef}
 					data={slides}
@@ -51,11 +51,13 @@ const Onboarding = () => {
 				/>
 			</View>
 			<Paginator data={slides} scrollX={scrollX} />
-			<NextButton
-				percentage={(currentIndex + 1) * (100 / slides.length)}
-				scrollTo={scrollTo}
-				showEmailForm={showEmailForm}
-			/>
+			<View style={{ flex: 3 }}>
+				<NextButton
+					percentage={(currentIndex + 1) * (100 / slides.length)}
+					scrollTo={scrollTo}
+					showEmailForm={showEmailForm}
+				/>
+			</View>
 		</View>
 	);
 };

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 const OTPScreen = () => {
 	return (
 		<View>
-			<Text>OTPScreen</Text>
+			<Text>OTPScreen1</Text>
 		</View>
 	);
 };

@@ -75,6 +75,7 @@ const NextButton: React.FC<NextButtonProps> = ({
       scrollEnabled={false}
       keyboardShouldPersistTaps={"always"}
       horizontal
+      showsHorizontalScrollIndicator={false}
     >
       <View style={styles.nextButtoncontainer}>
         <Svg width={size} height={size}>

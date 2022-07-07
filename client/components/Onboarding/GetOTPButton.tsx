@@ -3,11 +3,8 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import { Input, Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo } from "@expo/vector-icons";
-import {
-  useFonts,
-  Poppins_400Regular,
-  Poppins_700Bold,
-} from "@expo-google-fonts/poppins";
+import { useFonts, Poppins_400Regular } from "@expo-google-fonts/poppins";
+import { StatusBar } from "expo-status-bar";
 
 import { validate } from "../../constants/validators";
 import useStore from "../../store";
@@ -25,17 +22,18 @@ const GetOTPButton = () => {
   const [fontLoaded] = useFonts({ Poppins_400Regular });
 
   const onFormSubmit = () => {
-    if (!validate(email)) {
-      inputRef?.current.shake();
-      setErrorMessage("Please enter a valid email.");
-      return;
-    }
+    // if (!validate(email)) {
+    //   inputRef?.current.shake();
+    //   setErrorMessage("Please enter a valid email.");
+    //   return;
+    // }
 
-    setErrorMessage("");
+    // setErrorMessage("");
 
-    sendOTP(email, () => {
-      navigation.navigate("OTP");
-    });
+    // sendOTP(email, () => {
+    //   navigation.navigate("OTP");
+    // });
+    navigation.navigate("OTP");
   };
 
   if (!fontLoaded) {

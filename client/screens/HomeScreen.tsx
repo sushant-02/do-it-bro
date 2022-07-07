@@ -155,36 +155,36 @@ export default function HomeScreen() {
       totalTasks: 10,
       completedTasks: 4,
     },
-    // {
-    //   title: "Design App",
-    //   totalTasks: 24,
-    //   completedTasks: 10,
-    // },
-    // {
-    //   title: "Document",
-    //   totalTasks: 13,
-    //   completedTasks: 8,
-    // },
-    // {
-    //   title: "Design App",
-    //   totalTasks: 9,
-    //   completedTasks: 8,
-    // },
-    // {
-    //   title: "Document",
-    //   totalTasks: 38,
-    //   completedTasks: 4,
-    // },
-    // {
-    //   title: "Design App",
-    //   totalTasks: 14,
-    //   completedTasks: 7,
-    // },
+    {
+      title: "Design App",
+      totalTasks: 24,
+      completedTasks: 10,
+    },
+    {
+      title: "Document",
+      totalTasks: 13,
+      completedTasks: 8,
+    },
+    {
+      title: "Design App",
+      totalTasks: 9,
+      completedTasks: 8,
+    },
+    {
+      title: "Document",
+      totalTasks: 38,
+      completedTasks: 4,
+    },
+    {
+      title: "Design App",
+      totalTasks: 14,
+      completedTasks: 7,
+    },
   ];
 
-  const renderTasks = ({ item }: { item: TaskItemType }) => {
-    return <TaskCard title={item.title} status={item.status} />;
-  };
+  const renderTasks = tasks.map((item, index) => {
+    return <TaskCard key={index} title={item.title} status={item.status} />;
+  });
 
   const renderProjects = (item: ProjectsItemType, index: number) => {
     return (
@@ -240,7 +240,8 @@ export default function HomeScreen() {
 
       <>
         <Text style={styles.heading}>Today's Tasks</Text>
-        <FlatList data={tasks} renderItem={renderTasks} />
+        {/* <FlatList data={tasks} renderItem={renderTasks} /> */}
+        {renderTasks}
       </>
     </ScrollView>
   );

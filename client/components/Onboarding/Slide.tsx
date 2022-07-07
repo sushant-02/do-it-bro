@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import {
 	View,
 	Text,
@@ -8,7 +8,6 @@ import {
 	Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AppLoading from 'expo-app-loading';
 import * as SplashScreen from 'expo-splash-screen';
 import {
 	useFonts,
@@ -34,16 +33,30 @@ const Slide: React.FC<SlideProps> = ({ item }) => {
 	});
 
 	useEffect(() => {
+		async function prepare() {
+			try {
+				// Keep the splash screen visible while we fetch resources
+				await SplashScreen.preventAutoHideAsync();
+			} catch (e) {
+				console.warn(e);
+			}
+		}
+
+		prepare();
+	}, []);
+
+	const onLayoutRootView = useCallback(async () => {
 		if (fontLoaded) {
+			await SplashScreen.hideAsync();
 		}
 	}, [fontLoaded]);
 
 	if (!fontLoaded) {
-		return <AppLoading />;
+		return null;
 	}
 
 	return (
-		<SafeAreaView style={styles.slideContainer}>
+		<SafeAreaView style={styles.slideContainer} onLayout={onLayoutRootView}>
 			<Image source={item.image} style={styles.image} />
 			<View style={styles.textContainer}>
 				<Text style={styles.title}>{item.title}</Text>

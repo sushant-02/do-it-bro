@@ -38,7 +38,7 @@ const Slide: React.FC<SlideProps> = ({ item }) => {
 				// Keep the splash screen visible while we fetch resources
 				await SplashScreen.preventAutoHideAsync();
 			} catch (e) {
-				console.warn(e);
+				// console.warn(e);
 			}
 		}
 

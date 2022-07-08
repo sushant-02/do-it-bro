@@ -9,7 +9,7 @@ import {
   Poppins_900Black,
 } from "@expo-google-fonts/poppins";
 // @ts-ignore
-import { OTP } from "react-native-otp-form";
+import { OTP } from "expo-otp-form-inputs";
 import { Button } from "@rneui/themed";
 
 import doItBroAPI from "../api/doItBro";

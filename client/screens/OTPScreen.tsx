@@ -8,7 +8,7 @@ import {
   Poppins_900Black,
 } from "@expo-google-fonts/poppins";
 // @ts-ignore
-import OTPTextView from "react-native-otp-textinput";
+import { OTP } from "react-native-otp-form";
 import { Button } from "@rneui/themed";
 
 import doItBroAPI from "../api/doItBro";
@@ -24,8 +24,6 @@ const OTPScreen = () => {
   const [otpValue, setOtpValue] = useState<string>("");
 
   const email = useStore((state) => state.email);
-
-  const otpRef = useRef<any>(null);
 
   const onSubmit = async () => {
     if (otpValue.length !== 6) return;
@@ -54,15 +52,11 @@ const OTPScreen = () => {
         </Text>
       </View>
       <View style={styles.otpContainer}>
-        <OTPTextView
-          ref={otpRef}
-          defaultValue={otpValue}
-          handleTextChange={setOtpValue}
-          inputCount={6}
+        <OTP
+          codeCount={6}
           containerStyle={styles.textInputContainer}
-          textInputStyle={styles.roundedTextInput}
-          tintColor="#4756DF"
-          // caretHidden={true}
+          otpStyles={styles.roundedTextInput}
+          onTyping={(otp: string) => setOtpValue(otp)}
         />
         <Text style={{ textAlign: "center", marginVertical: 20 }}>
           <TouchableOpacity activeOpacity={1}>
@@ -129,9 +123,10 @@ const styles = StyleSheet.create({
   },
   roundedTextInput: {
     borderRadius: 10,
-    borderWidth: 4,
-    width: 40,
-    height: 40,
+    borderWidth: 1,
+    backgroundColor: "#eee",
+    width: 20,
+    height: 20,
   },
   submitOTPButtonContainer: {
     justifyContent: "center",

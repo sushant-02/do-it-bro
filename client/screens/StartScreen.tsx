@@ -1,17 +1,22 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, FlatList, Animated } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Components
 import Slide from "../components/Onboarding/Slide";
 import Paginator from "../components/Onboarding/Paginator";
 import NextButton from "../components/Onboarding/NextButton";
 
+// State
+import useStore from "../store";
+
 import { slides } from "../constants/onboardingSlides";
 
 const Onboarding = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [showEmailForm, setShowEmailForm] = useState<boolean>(false);
+  const setSafeAreaHeight = useStore((state) => state.setSafeAreaHeight);
 
   const slidesRef = useRef<any>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -21,6 +26,12 @@ const Onboarding = () => {
     }
   ).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+
+  // Set safe area height to a global state
+  const insets = useSafeAreaInsets();
+  useEffect(() => {
+    setSafeAreaHeight(insets.top);
+  }, []);
 
   const scrollTo = () => {
     if (currentIndex < slides.length - 1) {

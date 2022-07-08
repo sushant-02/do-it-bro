@@ -55,12 +55,13 @@ const OTPScreen = () => {
     setLoading(true);
 
     try {
-      await doItBroAPI.post("verify-otp/", {
+      const { data } = await doItBroAPI.post("verify-otp/", {
         email,
         otp: otpValue,
       });
 
-      await AsyncStorage.setItem("@viewedOnboarding", "false");
+      // await AsyncStorage.setItem("@viewedOnboarding", "false");
+      await AsyncStorage.multiSet([["@tokens", JSON.stringify(data.tokens)]]);
 
       navigation.reset({
         index: 0,

@@ -60,10 +60,9 @@ class VerifyOTPView(APIView):
 
     # Create a new User
     try:
-      first_name = Haikunator.haikunate(0, ' ')
       user, created = User.objects.get_or_create(
-        email=email, first_name=first_name)
-      serializer = UserSerializer(instance=user)
+        email=email)
+      serializer = UserSerializer(instance=user, partial=True)
     except Exception as e:
       return Response({'error': serializer.errors, 'message': 'Internal Server Error! Please try again in sometime'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

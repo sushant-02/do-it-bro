@@ -1,7 +1,8 @@
 import axios from "axios";
 
 let URL;
-URL = "https://do-it-bro.herokuapp.com/api/";
+// URL = "https://do-it-bro.herokuapp.com/api/";
+URL = "https://c0af-2405-201-301b-3a9b-f6f4-6e85-11a7-5916.in.ngrok.io/api/";
 
 // if (process.env.NODE_ENV === "production") {
 // } else {

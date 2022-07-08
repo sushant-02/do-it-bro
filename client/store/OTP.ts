@@ -4,13 +4,11 @@ import { OTPSlice } from "./types";
 import handleError from "../utils/handleError";
 import doItBroAPI from "../api/doItBro";
 
-import useStore from "../store";
-
 const createOTPSlice: StateCreator<OTPSlice> = (set, getState) => ({
   email: "",
   otpLoading: false,
   setEmail: (email) => set((state) => ({ ...state, email })),
-  sendOTP: async (email, navigate) => {
+  sendOTP: async (email, navigate, showFlashMessage) => {
     // @ts-ignore
     const { safeAreaHeight } = getState();
 
@@ -18,7 +16,8 @@ const createOTPSlice: StateCreator<OTPSlice> = (set, getState) => ({
 
     try {
       await doItBroAPI.post("send-otp/", { email });
-      navigate();
+      if (navigate) navigate();
+      if (showFlashMessage) showFlashMessage();
     } catch (err: any) {
       handleError(err, safeAreaHeight);
     } finally {

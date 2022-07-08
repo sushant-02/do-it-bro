@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -15,6 +15,7 @@ import { Button } from "@rneui/themed";
 import doItBroAPI from "../api/doItBro";
 import useStore from "../store";
 import handleError from "../utils/handleError";
+import handleSuccess from "../utils/handleSuccess";
 
 const OTP_PIN_LENGTH = 6;
 
@@ -31,6 +32,7 @@ const OTPScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const email = useStore((state) => state.email);
+  const sendOTP = useStore((state) => state.sendOTP);
   const safeAreaHeight = useStore((state) => state.safeAreaHeight);
 
   const navigation = useNavigation();
@@ -38,6 +40,12 @@ const OTPScreen = () => {
   const handleChange = (otp: string) => {
     setOtpValue(otp);
     setSubmitButtonEnabled(otp.length === OTP_PIN_LENGTH);
+  };
+
+  const handleResend = () => {
+    sendOTP(email, undefined, () =>
+      handleSuccess("OTP Sent Successfully!", safeAreaHeight)
+    );
   };
 
   const onSubmit = async () => {
@@ -87,7 +95,7 @@ const OTPScreen = () => {
           <TouchableOpacity activeOpacity={1}>
             <Text>Didn't receive code?</Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity activeOpacity={0.5} onPress={handleResend}>
             <Text style={{ color: "#2089dc" }}> Request again</Text>
           </TouchableOpacity>
         </Text>

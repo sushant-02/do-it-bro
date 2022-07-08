@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { useRef, useState } from "react";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {
   useFonts,
@@ -6,6 +7,12 @@ import {
   Poppins_400Regular_Italic,
   Poppins_900Black,
 } from "@expo-google-fonts/poppins";
+// @ts-ignore
+import OTPTextView from "react-native-otp-textinput";
+import { Button } from "@rneui/themed";
+
+import doItBroAPI from "../api/doItBro";
+import useStore from "../store";
 
 const OTPScreen = () => {
   const [fontLoaded, error] = useFonts({
@@ -13,6 +20,23 @@ const OTPScreen = () => {
     Poppins_400Regular_Italic,
     Poppins_900Black,
   });
+
+  const [otpValue, setOtpValue] = useState<string>("");
+
+  const email = useStore((state) => state.email);
+
+  const otpRef = useRef<any>(null);
+
+  const onSubmit = async () => {
+    if (otpValue.length !== 6) return;
+
+    const response = await doItBroAPI.post("verify-otp/", {
+      email,
+      otp: otpValue,
+    });
+
+    console.log(response.data);
+  };
 
   if (!fontLoaded) return null;
 
@@ -25,9 +49,35 @@ const OTPScreen = () => {
       <View style={styles.textContainer}>
         <Text style={styles.otpHeading}>Enter OTP</Text>
         <Text style={styles.helpText}>
-          A 6 digit code has been sent to{" "}
-          <Text style={styles.email}>ajinkya.deshpande0000@gmail.com</Text>
+          A 6-digit code has been sent to{" "}
+          <Text style={styles.email}>{email}</Text>
         </Text>
+      </View>
+      <View style={styles.otpContainer}>
+        <OTPTextView
+          ref={otpRef}
+          defaultValue={otpValue}
+          handleTextChange={setOtpValue}
+          inputCount={6}
+          containerStyle={styles.textInputContainer}
+          textInputStyle={styles.roundedTextInput}
+        />
+        <Text style={{ textAlign: "center", marginVertical: 20 }}>
+          <TouchableOpacity activeOpacity={1}>
+            <Text>Didn't receive code?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.5}>
+            <Text> Request again</Text>
+          </TouchableOpacity>
+        </Text>
+        <Button
+          containerStyle={styles.submitOTPButtonContainer}
+          title="Submit"
+          titleStyle={{ fontSize: 15, fontFamily: "Poppins_400Regular" }}
+          buttonStyle={styles.submitOTPButton}
+          onPress={onSubmit}
+          // loading={otpLoading}
+        />
       </View>
       <StatusBar backgroundColor="#4756DF" animated style="light" />
     </View>
@@ -42,7 +92,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    flex: 0.5,
+    flex: 0.6,
     justifyContent: "center",
     width: "60%",
     resizeMode: "contain",
@@ -51,6 +101,8 @@ const styles = StyleSheet.create({
     width: "80%",
     justifyContent: "space-between",
     textAlign: "center",
+    alignItems: "center",
+    paddingVertical: 10,
   },
   otpHeading: {
     fontSize: 30,
@@ -64,5 +116,27 @@ const styles = StyleSheet.create({
   email: {
     fontStyle: "italic",
     fontFamily: "Poppins_400Regular_Italic",
+  },
+  otpContainer: {
+    flex: 0.4,
+    justifyContent: "center",
+  },
+  textInputContainer: {
+    // marginVertical: 20,
+  },
+  roundedTextInput: {
+    borderRadius: 10,
+    borderWidth: 4,
+    width: 40,
+    height: 40,
+  },
+  submitOTPButtonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  submitOTPButton: {
+    width: "70%",
+    backgroundColor: "#4756DF",
+    borderRadius: 5,
   },
 });

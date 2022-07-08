@@ -22,18 +22,15 @@ const GetOTPButton = () => {
   const [fontLoaded] = useFonts({ Poppins_400Regular });
 
   const onFormSubmit = () => {
-    // if (!validate(email)) {
-    //   inputRef?.current.shake();
-    //   setErrorMessage("Please enter a valid email.");
-    //   return;
-    // }
-
-    // setErrorMessage("");
-
-    // sendOTP(email, () => {
-    //   navigation.navigate("OTP");
-    // });
-    navigation.navigate("OTP");
+    if (!validate(email)) {
+      inputRef?.current.shake();
+      setErrorMessage("Please enter a valid email.");
+      return;
+    }
+    setErrorMessage("");
+    sendOTP(email, () => {
+      navigation.navigate("OTP");
+    });
   };
 
   if (!fontLoaded) {

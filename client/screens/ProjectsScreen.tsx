@@ -116,8 +116,11 @@ export default function ProjectsScreen() {
 
   return (
     <View style={[styles.container, { marginBottom: tabBarHeight }]}>
-      <Text style={styles.heading}>Projects</Text>
-      <FlatList data={tasks} renderItem={renderTasks} />
+      <FlatList
+        data={tasks}
+        renderItem={renderTasks}
+        showsVerticalScrollIndicator={false}
+      />
       <TouchableOpacity activeOpacity={0.7}>
         <View style={styles.addButton}>
           <IconEntypo name="plus" size={30} color="white" />

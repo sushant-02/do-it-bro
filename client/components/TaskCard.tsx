@@ -40,7 +40,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ title, status }) => {
 
   return (
     <TouchableOpacity activeOpacity={0.7} style={styles.container}>
-      <View>
+      <View style={styles.detailContainer}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.date}>9:00 AM - 10:30 PM</Text>
       </View>
@@ -72,6 +72,9 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 14,
     color: "#636363",
+  },
+  detailContainer: {
+    maxWidth: "70%",
   },
   status: {
     padding: 5,

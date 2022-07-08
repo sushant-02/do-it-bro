@@ -29,7 +29,8 @@ export default function DailyTasksScreen() {
 
   const tasks: TaskItemType[] = [
     {
-      title: "Icon Design",
+      title:
+        "Icon Design laskdhf lksjgd flhdsfjjjashfdhlksd jk kjsdf kjdsgdskj",
       status: "complete",
     },
     {
@@ -116,8 +117,11 @@ export default function DailyTasksScreen() {
 
   return (
     <View style={[styles.container, { marginBottom: tabBarHeight }]}>
-      <Text style={styles.heading}>Today's Tasks</Text>
-      <FlatList data={tasks} renderItem={renderTasks} />
+      <FlatList
+        data={tasks}
+        renderItem={renderTasks}
+        showsVerticalScrollIndicator={false}
+      />
       <TouchableOpacity activeOpacity={0.7}>
         <View style={styles.addButton}>
           <IconEntypo name="plus" size={30} color="white" />

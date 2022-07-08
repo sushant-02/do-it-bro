@@ -1,5 +1,3 @@
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -20,8 +18,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen name="Onboarding" component={StartScreen} />
-      <Stack.Screen name="OTP" component={OTPScreen} /> */}
+      <Stack.Screen name="Onboarding" component={StartScreen} />
+      <Stack.Screen name="OTP" component={OTPScreen} />
       <Stack.Screen name="Root" component={BottomTabNavigator} />
     </Stack.Navigator>
   );
@@ -34,7 +32,9 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        // headerShown: false,
+        headerStyle: {
+          backgroundColor: "#EFF0F3",
+        },
         tabBarStyle: {
           position: "absolute",
           bottom: 0,
@@ -76,44 +76,3 @@ export default function Navigation() {
     </NavigationContainer>
   );
 }
-
-// <BottomTab.Screen
-// 	name='Home'
-// 	component={HomeScreen}
-// 	options={{
-// 		title: 'Home',
-// 		tabBarIcon: ({ color }) => (
-// 			<TabBarIconFontAwesome5 name='home' color={color} />
-// 		),
-// 	}}
-// />
-// <BottomTab.Screen
-// 	name='DailyTasks'
-// 	component={DailyTasksScreen}
-// 	options={{
-// 		title: 'Daily Tasks',
-// 		tabBarIcon: ({ color }) => (
-// 			<TabBarIconFontAwesome5 name='tasks' color={color} />
-// 		),
-// 	}}
-// />
-// <BottomTab.Screen
-// 	name='Projects'
-// 	component={ProjectsScreen}
-// 	options={{
-// 		title: 'Projects',
-// 		tabBarIcon: ({ color }) => (
-// 			<TabBarIconFoundation name='page-multiple' color={color} />
-// 		),
-// 	}}
-// />
-// <BottomTab.Screen
-// 	name='Profile'
-// 	component={ProfileScreen}
-// 	options={{
-// 		title: 'Profile',
-// 		tabBarIcon: ({ color }) => (
-// 			<TabBarIconFontAwesome5 name='user-alt' color={color} />
-// 		),
-// 	}}
-// />

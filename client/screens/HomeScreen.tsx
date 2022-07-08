@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { setStatusBarBackgroundColor } from "expo-status-bar";
+import {
+  setStatusBarBackgroundColor,
+  setStatusBarStyle,
+} from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -9,10 +12,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import DailyProgressCard from "../components/DailyProgressCard";
 import ProjectCard from "../components/ProjectCard";
 import TaskCard from "../components/TaskCard";
+
+// State
+import useStore from "../store";
 
 interface TaskItemType {
   title: string;
@@ -53,8 +60,17 @@ const monthNames = [
 
 export default function HomeScreen() {
   const [time, setTime] = useState<any>(null);
+  const setSafeAreaHeight = useStore((state) => state.setSafeAreaHeight);
+
   setStatusBarBackgroundColor("#EFF0F3", false);
+  setStatusBarStyle("dark");
   const tabBarHeight = useBottomTabBarHeight();
+
+  // Set safe area height to a global state
+  const insets = useSafeAreaInsets();
+  useEffect(() => {
+    setSafeAreaHeight(insets.top);
+  }, []);
 
   useEffect(() => {
     let dateObj = new Date();

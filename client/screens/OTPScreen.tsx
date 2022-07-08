@@ -61,13 +61,15 @@ const OTPScreen = () => {
           inputCount={6}
           containerStyle={styles.textInputContainer}
           textInputStyle={styles.roundedTextInput}
+          tintColor="#4756DF"
+          // caretHidden={true}
         />
         <Text style={{ textAlign: "center", marginVertical: 20 }}>
           <TouchableOpacity activeOpacity={1}>
             <Text>Didn't receive code?</Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5}>
-            <Text> Request again</Text>
+            <Text style={{ color: "#2089dc" }}> Request again</Text>
           </TouchableOpacity>
         </Text>
         <Button
@@ -112,6 +114,7 @@ const styles = StyleSheet.create({
   helpText: {
     fontFamily: "Poppins_400Regular",
     fontSize: 15,
+    textAlign: "center",
   },
   email: {
     fontStyle: "italic",

@@ -90,9 +90,24 @@ class OTPTextView extends Component {
 
   onKeyPress = (e, i) => {
     const val = this.state.otpText[i] || "";
-    if (e.nativeEvent.key === "Backspace" && i !== 0) {
+    if (
+      e.nativeEvent.key === "Backspace" &&
+      i !== 0 &&
+      i !== this.state.otpText.length - 1
+    ) {
       this.inputs[i - 1].focus();
       this.inputs[i - 1].clear();
+    } else if (
+      e.nativeEvent.key === "Backspace" &&
+      i === this.state.otpText.length - 1
+    ) {
+      if (val.length === 0) {
+        this.inputs[i - 1].clear();
+        this.inputs[i - 1].focus();
+      } else {
+        this.inputs[i].focus();
+        this.inputs[i].clear();
+      }
     }
   };
 

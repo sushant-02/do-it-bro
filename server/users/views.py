@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import UserOTPs
+from .models import UserOTPs, User
 from .serializers import UserSerializer
 
 from utils.auth_utils import generate_otp, send_otp_to_email, get_tokens_for_user
@@ -58,11 +58,9 @@ class VerifyOTPView(APIView):
       return Response({'error': 'Invalid OTP! Please try again'}, status=status.HTTP_401_UNAUTHORIZED)
 
     # Create a new User
-    serializer = UserSerializer(data={'email': email})
     try:
-      serializer.is_valid(raise_exception=True)
-      user = serializer.save()
-
+      user, created = User.objects.get_or_create(email=email)
+      serializer = UserSerializer(instance=user)
     except Exception as e:
       return Response({'error': serializer.errors, 'message': 'Internal Server Error! Please try again in sometime'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

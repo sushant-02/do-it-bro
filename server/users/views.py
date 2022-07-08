@@ -56,7 +56,7 @@ class VerifyOTPView(APIView):
 
     # Check if OTP is invalid
     if int(otp) != int(user_otp_obj.otp):
-      return Response({'error': 'Invalid OTP! Please try again'}, status=status.HTTP_401_UNAUTHORIZED)
+      return Response({'error': 'Invalid OTP! Please try again', 'message': 'Invalid OTP! Please try again'}, status=status.HTTP_401_UNAUTHORIZED)
 
     # Create a new User
     try:

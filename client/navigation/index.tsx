@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   RootStackParamList,
@@ -16,12 +18,29 @@ import OTPScreen from "../screens/OTPScreen";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const [isAppFirstTimeLoading, setIsAppFirstTimeLoading] = useState<any>(null);
+
+  useEffect(() => {
+    const getAppData = async () => {
+      const appData = await AsyncStorage.getItem("@viewedOnboarding");
+      if (appData === null) setIsAppFirstTimeLoading(true);
+    };
+
+    getAppData();
+  }, []);
+
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Onboarding" component={StartScreen} />
-      <Stack.Screen name="OTP" component={OTPScreen} />
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
-    </Stack.Navigator>
+    <>
+      {isAppFirstTimeLoading !== null && (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {isAppFirstTimeLoading && (
+            <Stack.Screen name="Onboarding" component={StartScreen} />
+          )}
+          <Stack.Screen name="Root" component={BottomTabNavigator} />
+          <Stack.Screen name="OTP" component={OTPScreen} />
+        </Stack.Navigator>
+      )}
+    </>
   );
 }
 

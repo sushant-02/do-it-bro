@@ -20,8 +20,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Onboarding" component={StartScreen} />
-      <Stack.Screen name="OTP" component={OTPScreen} />
+      {/* <Stack.Screen name="Onboarding" component={StartScreen} />
+      <Stack.Screen name="OTP" component={OTPScreen} /> */}
       <Stack.Screen name="Root" component={BottomTabNavigator} />
     </Stack.Navigator>
   );
@@ -34,7 +34,7 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        headerShown: false,
+        // headerShown: false,
         tabBarStyle: {
           position: "absolute",
           bottom: 0,
@@ -60,6 +60,7 @@ function BottomTabNavigator() {
             options={{
               title: tab.title,
               tabBarIcon: ({ color }) => tab.icon(color),
+              headerShown: !tab.hideHeader,
             }}
           />
         );

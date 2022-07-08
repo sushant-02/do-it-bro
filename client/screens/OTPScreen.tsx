@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import {
   useFonts,
   Poppins_400Regular,
@@ -25,15 +26,25 @@ const OTPScreen = () => {
 
   const email = useStore((state) => state.email);
 
+  const navigation = useNavigation();
+
   const onSubmit = async () => {
     if (otpValue.length !== 6) return;
 
-    const response = await doItBroAPI.post("verify-otp/", {
-      email,
-      otp: otpValue,
-    });
-
-    console.log(response.data);
+    try {
+      const response = await doItBroAPI.post("verify-otp/", {
+        email,
+        otp: otpValue,
+      });
+      console.log(response.data);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Root" }],
+      });
+    } catch (error: any) {
+      alert("Login Failed!");
+      console.log(error.response);
+    }
   };
 
   if (!fontLoaded) return null;

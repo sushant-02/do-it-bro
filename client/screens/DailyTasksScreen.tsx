@@ -41,20 +41,19 @@ export default function DailyTasksScreen() {
       />
       <TouchableOpacity
         activeOpacity={0.7}
-        // onPress={() => setAddTaskOpen(true)}
-        onPress={() => navigation.navigate("AddTask")}
+        onPress={() => setAddTaskOpen(true)}
       >
         <View style={styles.addButton}>
           <IconEntypo name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>
-      {/* <Modal
+      <Modal
         visible={addTaskOpen}
         animationType="slide"
         onRequestClose={() => setAddTaskOpen(false)}
       >
         <Text>This is Add Task Form</Text>
-      </Modal> */}
+      </Modal>
     </View>
   );
 }

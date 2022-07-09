@@ -14,7 +14,6 @@ import { bottomTabs } from "./bottomTabs";
 
 import StartScreen from "../screens/StartScreen";
 import OTPScreen from "../screens/OTPScreen";
-import AddTask from "../screens/AddTask";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -40,11 +39,6 @@ function RootNavigator() {
           )}
           <Stack.Screen name="Root" component={BottomTabNavigator} />
           <Stack.Screen name="OTP" component={OTPScreen} />
-          <Stack.Screen
-            name="AddTask"
-            component={AddTask}
-            options={{ headerShown: true }}
-          />
         </Stack.Navigator>
       )}
     </>

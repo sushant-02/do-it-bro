@@ -42,6 +42,7 @@ export type BottomTabTypes = {
   component: () => JSX.Element;
   icon: (color: string) => JSX.Element;
   hideHeader?: boolean;
+  alignCenter?: boolean;
 };
 
 // Task

@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
   SafeAreaView,
@@ -33,11 +34,8 @@ import { monthNames } from "../constants/dateTime";
 import useStore from "../store";
 import { splitName } from "../utils/commonUtils";
 import handleLogout from "../utils/handleLogout";
-import { useNavigation } from "@react-navigation/native";
 
 const { width: windowWidth } = Dimensions.get("window");
-
-SplashScreen.preventAutoHideAsync();
 
 SplashScreen.preventAutoHideAsync();
 

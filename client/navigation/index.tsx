@@ -81,6 +81,7 @@ function BottomTabNavigator() {
               title: tab.title,
               tabBarIcon: ({ color }) => tab.icon(color),
               headerShown: !tab.hideHeader,
+              headerTitleAlign: tab.alignCenter ? "center" : "left",
             }}
           />
         );

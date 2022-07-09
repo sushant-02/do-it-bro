@@ -1,7 +1,6 @@
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from haikunator import Haikunator
 
 from .models import UserOTPs, User
 from .serializers import UserSerializer
@@ -69,3 +68,11 @@ class VerifyOTPView(APIView):
     tokens = get_tokens_for_user(user)
 
     return Response({'user': serializer.data, 'tokens': tokens}, status=status.HTTP_200_OK)
+
+
+class UserDataView(APIView):
+  permission_classes = (permissions.IsAuthenticated, )
+
+  def get(self, request):
+    serializer = UserSerializer(instance=request.user)
+    return Response(serializer.data, status=status.HTTP_200_OK)

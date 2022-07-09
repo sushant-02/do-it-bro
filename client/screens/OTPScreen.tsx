@@ -16,6 +16,7 @@ import doItBroAPI from "../api/doItBro";
 import useStore from "../store";
 import handleError from "../utils/handleError";
 import handleSuccess from "../utils/handleSuccess";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OTP_PIN_LENGTH = 6;
 
@@ -54,10 +55,16 @@ const OTPScreen = () => {
     setLoading(true);
 
     try {
-      await doItBroAPI.post("verify-otp/", {
+      const { data } = await doItBroAPI.post("verify-otp/", {
         email,
         otp: otpValue,
       });
+
+      await AsyncStorage.multiSet([
+        ["@tokens", JSON.stringify(data.tokens)],
+        ["@viewedOnboarding", "false"],
+      ]);
+
       navigation.reset({
         index: 0,
         routes: [{ name: "Root" }],

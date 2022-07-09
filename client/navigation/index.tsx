@@ -24,6 +24,7 @@ function RootNavigator() {
     const getAppData = async () => {
       const appData = await AsyncStorage.getItem("@viewedOnboarding");
       if (appData === null) setIsAppFirstTimeLoading(true);
+      else setIsAppFirstTimeLoading(false);
     };
 
     getAppData();

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import FlashMessage from "react-native-flash-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -24,10 +24,8 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        {/* <SafeAreaView style={{ flex: 1 }}> */}
         <Navigation />
         <FlashMessage position="top" />
-        {/* </SafeAreaView> */}
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

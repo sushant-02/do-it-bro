@@ -5,23 +5,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Navigation from "./navigation";
 import useStore from "./store";
+import { loadTokensToState } from "./utils/commonUtils";
 
 export default function App() {
   const setTokens = useStore((state) => state.setTokens);
 
   useEffect(() => {
-    const loadTokensToState = async () => {
-      const tokens = await AsyncStorage.getItem("@tokens");
-      if (tokens !== null) {
-        const tokensParsed = JSON.parse(tokens);
-        setTokens(tokensParsed.refresh, tokensParsed.access);
-      } else {
-        // Handle Logout
-        await AsyncStorage.clear();
-      }
+    const loadTokens = async () => {
+      const [tokens, error]: any = await loadTokensToState();
+      if (tokens) setTokens(tokens.refresh, tokens.access);
+      else console.log(error);
     };
 
-    loadTokensToState();
+    loadTokens();
   }, []);
 
   return (

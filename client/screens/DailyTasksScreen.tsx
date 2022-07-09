@@ -1,20 +1,19 @@
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   FlatList,
   TouchableOpacity,
+  Modal,
 } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
 
 import TaskCard from "../components/TaskCard";
-
-interface TaskItemType {
-  title: string;
-  status: "complete" | "due" | "inProgress" | "todo";
-}
+import { TaskItemType } from "../types";
+import { tasks } from "../constants/tasks";
 
 function IconEntypo(props: {
   name: React.ComponentProps<typeof Entypo>["name"];
@@ -25,91 +24,9 @@ function IconEntypo(props: {
 }
 
 export default function DailyTasksScreen() {
+  const [addTaskOpen, setAddTaskOpen] = useState(false);
+  const navigation = useNavigation();
   const tabBarHeight = useBottomTabBarHeight();
-
-  const tasks: TaskItemType[] = [
-    {
-      title:
-        "Icon Design laskdhf lksjgd flhdsfjjjashfdhlksd jk kjsdf kjdsgdskj",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-  ];
 
   const renderTasks = ({ item }: { item: TaskItemType }) => {
     return <TaskCard title={item.title} status={item.status} />;
@@ -122,11 +39,22 @@ export default function DailyTasksScreen() {
         renderItem={renderTasks}
         showsVerticalScrollIndicator={false}
       />
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        // onPress={() => setAddTaskOpen(true)}
+        onPress={() => navigation.navigate("AddTask")}
+      >
         <View style={styles.addButton}>
           <IconEntypo name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>
+      {/* <Modal
+        visible={addTaskOpen}
+        animationType="slide"
+        onRequestClose={() => setAddTaskOpen(false)}
+      >
+        <Text>This is Add Task Form</Text>
+      </Modal> */}
     </View>
   );
 }
@@ -134,7 +62,7 @@ export default function DailyTasksScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
   },
   todayDate: {
     fontSize: 16,

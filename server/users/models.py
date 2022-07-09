@@ -14,8 +14,6 @@ class UserManager(BaseUserManager):
 
     email = self.normalize_email(email)
 
-    extra_fields.setdefault('first_name', Haikunator.haikunate(0, ' '))
-
     user = self.model(email=email, **extra_fields)
     user.set_password(password)
     user.save(using=self._db)
@@ -42,6 +40,8 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
   username = None
   email = models.EmailField(unique=True)
+  first_name = models.CharField(
+    max_length=30, default=Haikunator.haikunate(0, ' '))
 
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = []

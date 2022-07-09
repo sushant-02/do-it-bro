@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   RootStackParamList,
@@ -12,16 +14,40 @@ import { bottomTabs } from "./bottomTabs";
 
 import StartScreen from "../screens/StartScreen";
 import OTPScreen from "../screens/OTPScreen";
+import AddTask from "../screens/AddTask";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const [isAppFirstTimeLoading, setIsAppFirstTimeLoading] = useState<any>(null);
+
+  useEffect(() => {
+    const getAppData = async () => {
+      const appData = await AsyncStorage.getItem("@viewedOnboarding");
+      if (appData === null) setIsAppFirstTimeLoading(true);
+      else setIsAppFirstTimeLoading(false);
+    };
+
+    getAppData();
+  }, []);
+
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Onboarding" component={StartScreen} />
-      <Stack.Screen name="OTP" component={OTPScreen} />
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
-    </Stack.Navigator>
+    <>
+      {isAppFirstTimeLoading !== null && (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {isAppFirstTimeLoading && (
+            <Stack.Screen name="Onboarding" component={StartScreen} />
+          )}
+          <Stack.Screen name="Root" component={BottomTabNavigator} />
+          <Stack.Screen name="OTP" component={OTPScreen} />
+          <Stack.Screen
+            name="AddTask"
+            component={AddTask}
+            options={{ headerShown: true }}
+          />
+        </Stack.Navigator>
+      )}
+    </>
   );
 }
 

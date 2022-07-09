@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -14,36 +14,65 @@ import { Button } from "@rneui/themed";
 
 import doItBroAPI from "../api/doItBro";
 import useStore from "../store";
+import handleError from "../utils/handleError";
+import handleSuccess from "../utils/handleSuccess";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const OTP_PIN_LENGTH = 6;
 
 const OTPScreen = () => {
-  const [fontLoaded, error] = useFonts({
+  const [fontLoaded, _error] = useFonts({
     Poppins_400Regular,
     Poppins_400Regular_Italic,
     Poppins_900Black,
   });
 
   const [otpValue, setOtpValue] = useState<string>("");
+  const [submitButtonEnabled, setSubmitButtonEnabled] =
+    useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const email = useStore((state) => state.email);
+  const sendOTP = useStore((state) => state.sendOTP);
+  const safeAreaHeight = useStore((state) => state.safeAreaHeight);
 
   const navigation = useNavigation();
 
+  const handleChange = (otp: string) => {
+    setOtpValue(otp);
+    setSubmitButtonEnabled(otp.length === OTP_PIN_LENGTH);
+  };
+
+  const handleResend = () => {
+    sendOTP(email, undefined, () =>
+      handleSuccess("OTP Sent Successfully!", safeAreaHeight)
+    );
+  };
+
   const onSubmit = async () => {
-    if (otpValue.length !== 6) return;
+    if (otpValue.length !== OTP_PIN_LENGTH) return;
+
+    setLoading(true);
 
     try {
-      const response = await doItBroAPI.post("verify-otp/", {
+      const { data } = await doItBroAPI.post("verify-otp/", {
         email,
         otp: otpValue,
       });
-      console.log(response.data);
+
+      await AsyncStorage.multiSet([
+        ["@tokens", JSON.stringify(data.tokens)],
+        ["@viewedOnboarding", "false"],
+      ]);
+
       navigation.reset({
         index: 0,
         routes: [{ name: "Root" }],
       });
-    } catch (error: any) {
-      alert("Login Failed!");
-      console.log(error.response);
+    } catch (err: any) {
+      handleError(err, safeAreaHeight);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,13 +96,13 @@ const OTPScreen = () => {
           codeCount={6}
           containerStyle={styles.textInputContainer}
           otpStyles={styles.roundedTextInput}
-          onTyping={(otp: string) => setOtpValue(otp)}
+          onTyping={handleChange}
         />
         <Text style={{ textAlign: "center", marginVertical: 20 }}>
           <TouchableOpacity activeOpacity={1}>
             <Text>Didn't receive code?</Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity activeOpacity={0.5} onPress={handleResend}>
             <Text style={{ color: "#2089dc" }}> Request again</Text>
           </TouchableOpacity>
         </Text>
@@ -83,7 +112,8 @@ const OTPScreen = () => {
           titleStyle={{ fontSize: 15, fontFamily: "Poppins_400Regular" }}
           buttonStyle={styles.submitOTPButton}
           onPress={onSubmit}
-          // loading={otpLoading}
+          disabled={!submitButtonEnabled}
+          loading={loading}
         />
       </View>
       <StatusBar backgroundColor="#4756DF" animated style="light" />

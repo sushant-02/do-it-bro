@@ -6,5 +6,5 @@ urlpatterns = [
        name="send_otp"),
   path('verify-otp/', VerifyOTPView.as_view(),
        name="verify_otp"),
-  path('get-user/', UserDataView.as_view(), name="get_user")
+  path('user/', UserDataView.as_view(), name="get_update_user"),
 ]

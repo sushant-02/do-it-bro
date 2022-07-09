@@ -28,7 +28,7 @@ const createAuthSlice: StateCreator<AuthSlice> = (set, getState) => ({
     };
 
     try {
-      const { data: userData } = await doItBroAPI.get("get-user/", config);
+      const { data: userData } = await doItBroAPI.get("user/", config);
       set((state) => ({ ...state, user: userData }));
 
       return new Promise((resolve) => resolve(true));

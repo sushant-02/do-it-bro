@@ -12,7 +12,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import * as SplashScreen from "expo-splash-screen";
 
 import DailyProgressCard from "../components/DailyProgressCard";
 import ProjectCard from "../components/ProjectCard";
@@ -20,6 +24,7 @@ import TaskCard from "../components/TaskCard";
 
 // State
 import useStore from "../store";
+import { splitName } from "../utils/commonUtils";
 
 interface TaskItemType {
   title: string;
@@ -58,13 +63,31 @@ const monthNames = [
   "December",
 ];
 
+SplashScreen.preventAutoHideAsync();
+
 export default function HomeScreen() {
   const [time, setTime] = useState<any>(null);
   const setSafeAreaHeight = useStore((state) => state.setSafeAreaHeight);
+  const user = useStore((state) => state.user);
+  const getUser = useStore((state) => state.getUser);
 
   setStatusBarBackgroundColor("#EFF0F3", false);
   setStatusBarStyle("dark");
   const tabBarHeight = useBottomTabBarHeight();
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Keep the splash screen visible while we fetch resources
+        const isUseFetched = await getUser();
+        if (isUseFetched) await SplashScreen.hideAsync();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    prepare();
+  }, []);
 
   // Set safe area height to a global state
   const insets = useSafeAreaInsets();
@@ -216,50 +239,54 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView style={[styles.container, { marginBottom: tabBarHeight }]}>
-      <View style={styles.greeting}>
-        {time && (
-          <Text style={styles.todayDate}>
-            {time.day}, {time.date} {time.month} {time.year}
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView style={[styles.container, { marginBottom: tabBarHeight }]}>
+        <View style={styles.greeting}>
+          {time && (
+            <Text style={styles.todayDate}>
+              {time.day}, {time.date} {time.month} {time.year}
+            </Text>
+          )}
+          <Text style={styles.username}>
+            Hey, {splitName(user?.first_name)}!
           </Text>
-        )}
-        <Text style={styles.username}>Hey, Sushant!</Text>
-      </View>
-
-      <View style={styles.dailyProgressWrapper}>
-        <DailyProgressCard totalTasks={24} completedTasks={12} />
-      </View>
-
-      <>
-        <View style={styles.projectHeader}>
-          <Text style={styles.heading}>In Progress</Text>
-          <TouchableOpacity activeOpacity={0.7}>
-            <Text style={styles.viewAll}>View All</Text>
-          </TouchableOpacity>
         </View>
-        <FlatList
-          horizontal={true}
-          scrollEnabled={false}
-          showsHorizontalScrollIndicator={false}
-          data={[
-            ...projects.slice(0, 2),
-            {
-              title: "__ADD_BUTTON__",
-              totalTasks: 0,
-              completedTasks: 0,
-              addButton: true,
-            },
-          ]}
-          renderItem={({ item, index }) => renderProjects(item, index)}
-        />
-      </>
 
-      <>
-        <Text style={styles.heading}>Today's Tasks</Text>
-        {/* <FlatList data={tasks} renderItem={renderTasks} /> */}
-        {renderTasks}
-      </>
-    </ScrollView>
+        <View style={styles.dailyProgressWrapper}>
+          <DailyProgressCard totalTasks={24} completedTasks={12} />
+        </View>
+
+        <>
+          <View style={styles.projectHeader}>
+            <Text style={styles.heading}>In Progress</Text>
+            <TouchableOpacity activeOpacity={0.7}>
+              <Text style={styles.viewAll}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            horizontal={true}
+            scrollEnabled={false}
+            showsHorizontalScrollIndicator={false}
+            data={[
+              ...projects.slice(0, 2),
+              {
+                title: "__ADD_BUTTON__",
+                totalTasks: 0,
+                completedTasks: 0,
+                addButton: true,
+              },
+            ]}
+            renderItem={({ item, index }) => renderProjects(item, index)}
+          />
+        </>
+
+        <>
+          <Text style={styles.heading}>Today's Tasks</Text>
+          {/* <FlatList data={tasks} renderItem={renderTasks} /> */}
+          {renderTasks}
+        </>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

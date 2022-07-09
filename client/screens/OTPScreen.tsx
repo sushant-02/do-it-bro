@@ -60,8 +60,10 @@ const OTPScreen = () => {
         otp: otpValue,
       });
 
-      // await AsyncStorage.setItem("@viewedOnboarding", "false");
-      await AsyncStorage.multiSet([["@tokens", JSON.stringify(data.tokens)]]);
+      await AsyncStorage.multiSet([
+        ["@tokens", JSON.stringify(data.tokens)],
+        ["@viewedOnboarding", "false"],
+      ]);
 
       navigation.reset({
         index: 0,

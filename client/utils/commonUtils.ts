@@ -5,7 +5,9 @@ export const capitalize = (name: string) => {
 };
 
 export const splitName = (name: string) => {
-  return capitalize(name?.split(" ")[0]);
+  return (
+    capitalize(name?.split(" ")[0]) + " " + capitalize(name?.split(" ")[1])
+  );
 };
 
 export const loadTokensToState = async () => {

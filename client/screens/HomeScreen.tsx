@@ -37,7 +37,7 @@ import handleLogout from "../utils/handleLogout";
 
 const { width: windowWidth } = Dimensions.get("window");
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 export default function HomeScreen() {
   const [time, setTime] = useState<any>(null);
@@ -52,21 +52,21 @@ export default function HomeScreen() {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    async function prepare() {
-      try {
-        // Keep the splash screen visible while we fetch resources
-        await getUser();
-        await SplashScreen.hideAsync();
-      } catch (err) {
-        handleLogout(() => {
-          navigation.navigate("Onboarding");
-        });
-      }
-    }
+  // useEffect(() => {
+  //   async function prepare() {
+  //     try {
+  //       // Keep the splash screen visible while we fetch resources
+  //       await getUser();
+  //       await SplashScreen.hideAsync();
+  //     } catch (err) {
+  //       handleLogout(() => {
+  //         // navigation.navigate("Onboarding");
+  //       });
+  //     }
+  //   }
 
-    prepare();
-  }, []);
+  //   prepare();
+  // }, []);
 
   // Set safe area height to a global state
   const insets = useSafeAreaInsets();

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,12 +6,15 @@ import {
   FlatList,
   TouchableOpacity,
   Modal,
+  Button,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 import TaskCard from "../components/TaskCard";
+import AddTask from "../components/AddTask";
 import { TaskItemType } from "../types";
 import { tasks } from "../constants/tasks";
 
@@ -28,6 +31,23 @@ export default function DailyTasksScreen() {
   const navigation = useNavigation();
   const tabBarHeight = useBottomTabBarHeight();
 
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const snapPoints = useMemo(() => ["50%", "100%"], []);
+
+  const handleSheetChange = useCallback((index) => {
+    console.log("handleSheetChange", index);
+  }, []);
+
+  const handleSnapPress = useCallback((index) => {
+    bottomSheetRef.current?.snapToIndex(index);
+    setAddTaskOpen(true);
+  }, []);
+
+  const handleClosePress = useCallback(() => {
+    bottomSheetRef.current?.close();
+  }, []);
+
   const renderTasks = ({ item }: { item: TaskItemType }) => {
     return <TaskCard title={item.title} status={item.status} />;
   };
@@ -39,21 +59,24 @@ export default function DailyTasksScreen() {
         renderItem={renderTasks}
         showsVerticalScrollIndicator={false}
       />
-      <TouchableOpacity
-        activeOpacity={0.7}
-        onPress={() => setAddTaskOpen(true)}
-      >
+      <TouchableOpacity activeOpacity={0.7} onPress={() => handleSnapPress(0)}>
         <View style={styles.addButton}>
           <IconEntypo name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>
-      <Modal
-        visible={addTaskOpen}
-        animationType="slide"
-        onRequestClose={() => setAddTaskOpen(false)}
+      <BottomSheet
+        index={-1}
+        ref={bottomSheetRef}
+        snapPoints={snapPoints}
+        onChange={handleSheetChange}
+        onClose={() => setAddTaskOpen(false)}
+        enablePanDownToClose
+        detached
       >
-        <Text>This is Add Task Form</Text>
-      </Modal>
+        <BottomSheetView>
+          <AddTask />
+        </BottomSheetView>
+      </BottomSheet>
     </View>
   );
 }

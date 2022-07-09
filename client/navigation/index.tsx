@@ -32,7 +32,7 @@ function RootNavigator() {
 
   return (
     <>
-      {isAppFirstTimeLoading !== null && (
+      {/* {isAppFirstTimeLoading !== null && (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {isAppFirstTimeLoading && (
             <Stack.Screen name="Onboarding" component={StartScreen} />
@@ -40,7 +40,10 @@ function RootNavigator() {
           <Stack.Screen name="Root" component={BottomTabNavigator} />
           <Stack.Screen name="OTP" component={OTPScreen} />
         </Stack.Navigator>
-      )}
+      )} */}
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Root" component={BottomTabNavigator} />
+      </Stack.Navigator>
     </>
   );
 }
@@ -52,6 +55,7 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{
+        tabBarHideOnKeyboard: true,
         headerStyle: {
           backgroundColor: "#EFF0F3",
         },

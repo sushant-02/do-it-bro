@@ -42,6 +42,8 @@ class User(AbstractUser):
   email = models.EmailField(unique=True)
   first_name = models.CharField(
     max_length=30, default=Haikunator.haikunate(0, ' '))
+  image_url = models.CharField(max_length=255, blank=True, null=True,
+                               default='https://avatars.dicebear.com/api/bottts/pandeu.svg?scale=97&colors[]=blue')
 
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = []

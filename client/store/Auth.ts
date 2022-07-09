@@ -1,6 +1,7 @@
 import { StateCreator } from "zustand";
 
 import doItBroAPI from "../api/doItBro";
+import { loadTokensToState } from "../utils/commonUtils";
 import handleError from "../utils/handleError";
 import { AuthSlice } from "./types";
 
@@ -13,7 +14,12 @@ const createAuthSlice: StateCreator<AuthSlice> = (set, getState) => ({
   user: null,
   getUser: async () => {
     // @ts-ignore
-    const { safeAreaHeight, accessToken } = getState();
+    let { safeAreaHeight, accessToken } = getState();
+
+    if (!accessToken) {
+      const [tokens]: any = await loadTokensToState();
+      accessToken = tokens.access;
+    }
 
     const config = {
       headers: {
@@ -30,7 +36,7 @@ const createAuthSlice: StateCreator<AuthSlice> = (set, getState) => ({
       console.log(err.response);
       handleError(err, safeAreaHeight);
 
-      return new Promise((resolve) => resolve(false));
+      return new Promise((_resolve, reject) => reject(false));
     } finally {
       set((state) => ({ ...state, otpLoading: false }));
     }

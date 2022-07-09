@@ -25,6 +25,8 @@ import TaskCard from "../components/TaskCard";
 // State
 import useStore from "../store";
 import { splitName } from "../utils/commonUtils";
+import handleLogout from "../utils/handleLogout";
+import { useNavigation } from "@react-navigation/native";
 
 interface TaskItemType {
   title: string;
@@ -75,14 +77,18 @@ export default function HomeScreen() {
   setStatusBarStyle("dark");
   const tabBarHeight = useBottomTabBarHeight();
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     async function prepare() {
       try {
         // Keep the splash screen visible while we fetch resources
-        const isUseFetched = await getUser();
-        if (isUseFetched) await SplashScreen.hideAsync();
+        await getUser();
+        await SplashScreen.hideAsync();
       } catch (err) {
-        console.log(err);
+        handleLogout(() => {
+          navigation.navigate("Onboarding");
+        });
       }
     }
 

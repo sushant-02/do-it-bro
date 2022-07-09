@@ -24,6 +24,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Onboarding: undefined;
   OTP: undefined;
+  LogIn: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

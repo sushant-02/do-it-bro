@@ -11,6 +11,14 @@ const createAuthSlice: StateCreator<AuthSlice> = (set, getState) => ({
   setTokens: (refreshToken: string, accessToken: string) => {
     set((state) => ({ ...state, refreshToken, accessToken }));
   },
+  unsetTokens: () => {
+    set((state) => ({
+      ...state,
+      accessToken: null,
+      refreshToken: null,
+      user: null,
+    }));
+  },
   user: null,
   getUser: async () => {
     // @ts-ignore
@@ -33,9 +41,6 @@ const createAuthSlice: StateCreator<AuthSlice> = (set, getState) => ({
 
       return new Promise((resolve) => resolve(true));
     } catch (err: any) {
-      console.log(err.response);
-      handleError(err, safeAreaHeight);
-
       return new Promise((_resolve, reject) => reject(false));
     } finally {
       set((state) => ({ ...state, otpLoading: false }));

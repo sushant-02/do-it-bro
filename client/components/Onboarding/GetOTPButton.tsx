@@ -11,7 +11,15 @@ import useStore from "../../store";
 
 const { width } = Dimensions.get("window");
 
-const GetOTPButton = () => {
+interface GetOTPButtonProps {
+  fromLoginScreen?: boolean;
+  showOTPInput?: () => void;
+}
+
+const GetOTPButton: React.FC<GetOTPButtonProps> = ({
+  fromLoginScreen,
+  showOTPInput,
+}) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { email, setEmail, sendOTP, otpLoading } = useStore();
 
@@ -28,9 +36,14 @@ const GetOTPButton = () => {
       return;
     }
     setErrorMessage("");
-    sendOTP(email, () => {
-      navigation.navigate("OTP");
-    });
+
+    if (fromLoginScreen) {
+      sendOTP(email, showOTPInput);
+    } else {
+      sendOTP(email, () => {
+        navigation.navigate("OTP");
+      });
+    }
   };
 
   if (!fontLoaded) {

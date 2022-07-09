@@ -76,3 +76,14 @@ class UserDataView(APIView):
   def get(self, request):
     serializer = UserSerializer(instance=request.user)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+  def patch(self, request):
+    serializer = UserSerializer(
+      instance=request.user, data=request.data, partial=True)
+
+    try:
+      serializer.is_valid(raise_exception=True)
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+      return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

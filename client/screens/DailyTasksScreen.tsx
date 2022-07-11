@@ -1,20 +1,21 @@
+import { useCallback, useRef, useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
-  ScrollView,
   FlatList,
   TouchableOpacity,
+  Text,
 } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import BottomSheet from "@gorhom/bottom-sheet";
+
+import CustomBottomSheet from "../components/CustomBottomSheet";
 
 import TaskCard from "../components/TaskCard";
-
-interface TaskItemType {
-  title: string;
-  status: "complete" | "due" | "inProgress" | "todo";
-}
+import AddTask from "../components/AddTask";
+import { TaskItemType } from "../types";
+import { tasks } from "../constants/tasks";
 
 function IconEntypo(props: {
   name: React.ComponentProps<typeof Entypo>["name"];
@@ -25,94 +26,29 @@ function IconEntypo(props: {
 }
 
 export default function DailyTasksScreen() {
+  const [selectedTask, setSelectedTask] = useState(null);
   const tabBarHeight = useBottomTabBarHeight();
+  const addTaskRef = useRef<BottomSheet>(null);
+  const showTaskRef = useRef<BottomSheet>(null);
 
-  const tasks: TaskItemType[] = [
-    {
-      title:
-        "Icon Design laskdhf lksjgd flhdsfjjjashfdhlksd jk kjsdf kjdsgdskj",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-  ];
+  const handleAddTaskSnapPress = useCallback((index) => {
+    addTaskRef.current?.snapToIndex(index);
+  }, []);
+
+  const handleShowTaskSnapPress = useCallback((index) => {
+    showTaskRef.current?.snapToIndex(index);
+  }, []);
 
   const renderTasks = ({ item }: { item: TaskItemType }) => {
-    return <TaskCard title={item.title} status={item.status} />;
+    return (
+      <TaskCard
+        task={item}
+        title={item.title}
+        status={item.status}
+        handleShowTaskSnapPress={handleShowTaskSnapPress}
+        setSelectedTask={setSelectedTask}
+      />
+    );
   };
 
   return (
@@ -122,11 +58,20 @@ export default function DailyTasksScreen() {
         renderItem={renderTasks}
         showsVerticalScrollIndicator={false}
       />
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => handleAddTaskSnapPress(0)}
+      >
         <View style={styles.addButton}>
           <IconEntypo name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>
+      <CustomBottomSheet bottomSheetRef={addTaskRef} title="Add Task">
+        <AddTask dateDisabled={true} />
+      </CustomBottomSheet>
+      <CustomBottomSheet bottomSheetRef={showTaskRef} title="Title Task">
+        <Text>Sushant Pandey</Text>
+      </CustomBottomSheet>
     </View>
   );
 }
@@ -134,7 +79,7 @@ export default function DailyTasksScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
   },
   todayDate: {
     fontSize: 16,

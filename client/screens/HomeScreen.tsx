@@ -10,7 +10,9 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
   SafeAreaView,
@@ -19,58 +21,29 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 
 import DailyProgressCard from "../components/DailyProgressCard";
-import ProjectCard from "../components/ProjectCard";
+import ProjectCardOne from "../components/ProjectCardOne";
 import TaskCard from "../components/TaskCard";
+
+import { ProjectsItemType } from "../types";
+import { tasks } from "../constants/tasks";
+import { projects } from "../constants/projects";
+import { dayNames } from "../constants/dateTime";
+import { monthNames } from "../constants/dateTime";
 
 // State
 import useStore from "../store";
 import { splitName } from "../utils/commonUtils";
 import handleLogout from "../utils/handleLogout";
-import { useNavigation } from "@react-navigation/native";
 
-interface TaskItemType {
-  title: string;
-  status: "complete" | "due" | "inProgress" | "todo";
-}
+const { width: windowWidth } = Dimensions.get("window");
 
-interface ProjectsItemType {
-  title: string;
-  totalTasks: number;
-  completedTasks: number;
-  addButton?: boolean;
-}
-
-const dayNames = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 export default function HomeScreen() {
   const [time, setTime] = useState<any>(null);
   const [renderContent, setRenderContent] = useState<boolean>(false);
   const setSafeAreaHeight = useStore((state) => state.setSafeAreaHeight);
+  const safeAreaHeight = useStore((state) => state.safeAreaHeight);
   const user = useStore((state) => state.user);
   const getUser = useStore((state) => state.getUser);
 
@@ -114,134 +87,26 @@ export default function HomeScreen() {
     });
   }, []);
 
-  const tasks: TaskItemType[] = [
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-  ];
-
-  const projects: ProjectsItemType[] = [
-    {
-      title: "Document",
-      totalTasks: 10,
-      completedTasks: 4,
-    },
-    {
-      title: "Design App",
-      totalTasks: 24,
-      completedTasks: 10,
-    },
-    {
-      title: "Document",
-      totalTasks: 13,
-      completedTasks: 8,
-    },
-    {
-      title: "Design App",
-      totalTasks: 9,
-      completedTasks: 8,
-    },
-    {
-      title: "Document",
-      totalTasks: 38,
-      completedTasks: 4,
-    },
-    {
-      title: "Design App",
-      totalTasks: 14,
-      completedTasks: 7,
-    },
-  ];
-
   const renderTasks = tasks.map((item, index) => {
-    return <TaskCard key={index} title={item.title} status={item.status} />;
+    return (
+      <TaskCard
+        task={item}
+        key={index}
+        title={item.title}
+        status={item.status}
+      />
+    );
   });
 
   const renderProjects = (item: ProjectsItemType, index: number) => {
     return (
       <View style={{ marginVertical: 8 }}>
-        <ProjectCard
+        <ProjectCardOne
           title={item.title}
           totalTasks={item.totalTasks}
           completedTasks={item.completedTasks}
           addButton={item.addButton}
+          width={(windowWidth - 2 * 20 - 15) / 2}
         />
       </View>
     );

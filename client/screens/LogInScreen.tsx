@@ -87,7 +87,7 @@ const LoginScreen = () => {
         routes: [{ name: "Root" }],
       });
     } catch (err: any) {
-      handleError(err, safeAreaHeight);
+      handleError(err, null, safeAreaHeight);
     } finally {
       setLoading(false);
     }

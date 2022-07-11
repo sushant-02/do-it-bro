@@ -54,5 +54,6 @@ export const bottomTabs: BottomTabTypes[] = [
     icon: (color: string) => {
       return <TabBarIconFontAwesome5 name="user-alt" color={color} />;
     },
+    alignCenter: true,
   },
 ];

@@ -9,12 +9,9 @@ import {
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
 
-import TaskCard from "../components/TaskCard";
-
-interface TaskItemType {
-  title: string;
-  status: "complete" | "due" | "inProgress" | "todo";
-}
+import ProjectCardTwo from "../components/ProjectCardTwo";
+import { ProjectsItemType } from "../types";
+import { projects } from "../constants/projects";
 
 function IconEntypo(props: {
   name: React.ComponentProps<typeof Entypo>["name"];
@@ -27,99 +24,26 @@ function IconEntypo(props: {
 export default function ProjectsScreen() {
   const tabBarHeight = useBottomTabBarHeight();
 
-  const tasks: TaskItemType[] = [
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-    {
-      title: "Icon Design",
-      status: "complete",
-    },
-    {
-      title: "NFT Dashboard",
-      status: "todo",
-    },
-    {
-      title: "Forex Trading",
-      status: "inProgress",
-    },
-    {
-      title: "Sleep",
-      status: "due",
-    },
-  ];
-
-  const renderTasks = ({ item }: { item: TaskItemType }) => {
-    return <TaskCard title={item.title} status={item.status} />;
+  const renderProjects = (item: ProjectsItemType, index: number) => {
+    return (
+      <View style={{ marginVertical: 8 }}>
+        <ProjectCardTwo
+          title={item.title}
+          totalTasks={item.totalTasks}
+          completedTasks={item.completedTasks}
+          addButton={item.addButton}
+          width="100%"
+        />
+      </View>
+    );
   };
 
   return (
     <View style={[styles.container, { marginBottom: tabBarHeight }]}>
       <FlatList
-        data={tasks}
-        renderItem={renderTasks}
         showsVerticalScrollIndicator={false}
+        data={projects}
+        renderItem={({ item, index }) => renderProjects(item, index)}
       />
       <TouchableOpacity activeOpacity={0.7}>
         <View style={styles.addButton}>
@@ -133,7 +57,7 @@ export default function ProjectsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
   },
   todayDate: {
     fontSize: 16,

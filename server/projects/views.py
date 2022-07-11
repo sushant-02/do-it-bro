@@ -11,10 +11,14 @@ class DailyTask(APIView):
 
   def get(self, request):
     user = request.user
-    daily = Daily.objects.get(user=user)
+
+    try:
+      daily = Daily.objects.get(user=user)
+    except Exception as e:
+      return Response({'error': str(e), 'message': 'Internal Server Error! Please try in sometime'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     serializer = DailySerializer(instance=daily)
-    return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
   def post(self, request):
     user = request.user

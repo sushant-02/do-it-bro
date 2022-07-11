@@ -8,11 +8,11 @@ import { verifyDateTime } from "../utils/commonUtils";
 
 import useStore from "../store";
 
-interface AddTaskProps {
+interface ViewTaskProps {
   dateDisabled: boolean;
 }
 
-const AddTask: React.FC<AddTaskProps> = ({ dateDisabled }) => {
+const ViewTask: React.FC<ViewTaskProps> = ({ dateDisabled }) => {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
@@ -22,7 +22,7 @@ const AddTask: React.FC<AddTaskProps> = ({ dateDisabled }) => {
 
   const safeAreaHeight = useStore((state) => state.safeAreaHeight);
 
-  const onTaskAdd = () => {
+  const onTaskEdit = () => {
     if (!title.trim().length) {
       setErrorMessage("Task can't be empty");
       setTitle("");
@@ -49,49 +49,7 @@ const AddTask: React.FC<AddTaskProps> = ({ dateDisabled }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Enter task</Text>
-      <TextInput
-        style={{
-          backgroundColor: "#f5f5f5",
-          borderRadius: 5,
-          paddingVertical: 7,
-          paddingHorizontal: 12,
-          marginBottom: 5,
-          fontSize: 16,
-        }}
-        placeholder="What's the task"
-        defaultValue={title}
-        onChangeText={(newVal) => setTitle(newVal)}
-      />
-      <Text style={{ color: "#f44336", marginBottom: 10 }}>{errorMessage}</Text>
-      <View style={styles.dateTimeInputContainer}>
-        <DateTimeInput
-          title="Start Date/Time"
-          curDate={startDate}
-          setCurDate={setStartDate}
-          curTime={startTime}
-          setCurTime={setStartTime}
-          disabled={dateDisabled}
-        />
-      </View>
-      <View style={styles.dateTimeInputContainer}>
-        <DateTimeInput
-          title="Due Date/Time"
-          curDate={dueDate}
-          setCurDate={setDueDate}
-          curTime={dueTime}
-          setCurTime={setDueTime}
-          disabled={dateDisabled}
-        />
-      </View>
-
-      <Button
-        containerStyle={styles.addTaskButtonContainer}
-        buttonStyle={styles.addTaskButton}
-        title="Add Task"
-        onPress={onTaskAdd}
-        // loading={otpLoading}
-      />
+      <Text>Task Screen</Text>
     </View>
   );
 };
@@ -122,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddTask;
+export default ViewTask;

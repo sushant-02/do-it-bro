@@ -1,26 +1,58 @@
-import { ScrollView, StyleSheet, Text, View, Button } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { Image } from "@rneui/themed";
+import { useNavigation } from "@react-navigation/native";
+import { Image, Button } from "@rneui/themed";
 import {
   useFonts,
   Poppins_400Regular,
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
 
+import handleLogout from "../utils/handleLogout";
+
 import useStore from "../store";
 import { splitName } from "../utils/commonUtils";
 
-const BASE_URI = "../assets/do-it-bro-icon.png";
+const FALLBACK_IMAGE_URI =
+  "https://avatars.dicebear.com/api/bottts/pandeu.png?scale=97&colors[]=blue";
 const image_width = 120;
 
 export default function ProfileScreen() {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const user = useStore((state) => state.user);
+
   const [fontLoaded, _error] = useFonts({
     Poppins_400Regular,
     Poppins_700Bold,
   });
+
   const tabBarHeight = useBottomTabBarHeight();
-  const user = useStore((state) => state.user);
+
+  const navigation = useNavigation();
+
   console.log(user);
+
+  useEffect(() => {
+    return () => {
+      setIsLoggingOut(false);
+    };
+  }, []);
+
+  const logout = () => {
+    setIsLoggingOut(true);
+
+    handleLogout(() => {
+      navigation.navigate("LogIn");
+    });
+  };
 
   if (!fontLoaded) return null;
 
@@ -31,17 +63,23 @@ export default function ProfileScreen() {
           style={{
             height: "100%",
             width: "100%",
-            resizeMode: "contain",
+            resizeMode: "center",
           }}
-          source={require(BASE_URI)}
+          source={{
+            uri: user?.image_url || FALLBACK_IMAGE_URI,
+          }}
           containerStyle={styles.profileImage}
-          // PlaceholderContent={<ActivityIndicator />}
+          PlaceholderContent={<ActivityIndicator />}
         />
-        {/* <Text style={styles.name}>{splitName(user?.first_name)}</Text>
-        <Text style={styles.email}>{user?.email}</Text> */}
-        <Text style={styles.name}>Sushant Pandey</Text>
-        <Text style={styles.email}>skp000002@gmail.com</Text>
-        <Button title="Logout" onPress={() => alert("Logout")} />
+        <Text style={styles.name}>{splitName(user?.first_name)}</Text>
+        <Text style={styles.email}>{user?.email}</Text>
+        {/* <Text style={styles.name}>Sushant Pandey</Text>
+        <Text style={styles.email}>skp000002@gmail.com</Text> */}
+        <Button
+          title={isLoggingOut ? "Logging Out" : "Logout"}
+          onPress={logout}
+          disabled={isLoggingOut}
+        />
       </View>
     </ScrollView>
   );
@@ -57,13 +95,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileImage: {
-    backgroundColor: "red",
+    backgroundColor: "#fff",
     width: image_width,
     aspectRatio: 1,
-    resizeMode: "cover",
+    resizeMode: "contain",
     borderRadius: image_width / 2,
-    borderColor: "black",
-    borderWidth: 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
   name: {
     fontSize: 22,

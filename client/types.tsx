@@ -39,7 +39,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type BottomTabTypes = {
   name: keyof RootTabParamList;
   title: string;
-  component: () => JSX.Element;
+  component: () => JSX.Element | null;
   icon: (color: string) => JSX.Element;
   hideHeader?: boolean;
   alignCenter?: boolean;

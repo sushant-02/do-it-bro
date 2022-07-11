@@ -33,7 +33,7 @@ function RootNavigator() {
 
   return (
     <>
-      {/* {isAppFirstTimeLoading !== null && (
+      {isAppFirstTimeLoading !== null && (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {isAppFirstTimeLoading && (
             <Stack.Screen name="Onboarding" component={StartScreen} />
@@ -42,10 +42,7 @@ function RootNavigator() {
           <Stack.Screen name="OTP" component={OTPScreen} />
           <Stack.Screen name="LogIn" component={LogInScreen} />
         </Stack.Navigator>
-      )} */}
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Root" component={BottomTabNavigator} />
-      </Stack.Navigator>
+      )}
     </>
   );
 }
@@ -88,6 +85,7 @@ function BottomTabNavigator() {
               tabBarIcon: ({ color }) => tab.icon(color),
               headerShown: !tab.hideHeader,
               headerTitleAlign: tab.alignCenter ? "center" : "left",
+              headerTitleStyle: { fontWeight: "900" },
             }}
           />
         );

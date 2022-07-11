@@ -88,7 +88,14 @@ export default function HomeScreen() {
   }, []);
 
   const renderTasks = tasks.map((item, index) => {
-    return <TaskCard key={index} title={item.title} status={item.status} />;
+    return (
+      <TaskCard
+        task={item}
+        key={index}
+        title={item.title}
+        status={item.status}
+      />
+    );
   });
 
   const renderProjects = (item: ProjectsItemType, index: number) => {

@@ -1,17 +1,16 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   FlatList,
   TouchableOpacity,
-  Modal,
-  Button,
+  Text,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
+
+import CustomBottomSheet from "../components/CustomBottomSheet";
 
 import TaskCard from "../components/TaskCard";
 import AddTask from "../components/AddTask";
@@ -27,29 +26,29 @@ function IconEntypo(props: {
 }
 
 export default function DailyTasksScreen() {
-  const [addTaskOpen, setAddTaskOpen] = useState(false);
-  const navigation = useNavigation();
+  const [selectedTask, setSelectedTask] = useState(null);
   const tabBarHeight = useBottomTabBarHeight();
+  const addTaskRef = useRef<BottomSheet>(null);
+  const showTaskRef = useRef<BottomSheet>(null);
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const snapPoints = useMemo(() => ["50%", "100%"], []);
-
-  const handleSheetChange = useCallback((index) => {
-    console.log("handleSheetChange", index);
+  const handleAddTaskSnapPress = useCallback((index) => {
+    addTaskRef.current?.snapToIndex(index);
   }, []);
 
-  const handleSnapPress = useCallback((index) => {
-    bottomSheetRef.current?.snapToIndex(index);
-    setAddTaskOpen(true);
-  }, []);
-
-  const handleClosePress = useCallback(() => {
-    bottomSheetRef.current?.close();
+  const handleShowTaskSnapPress = useCallback((index) => {
+    showTaskRef.current?.snapToIndex(index);
   }, []);
 
   const renderTasks = ({ item }: { item: TaskItemType }) => {
-    return <TaskCard title={item.title} status={item.status} />;
+    return (
+      <TaskCard
+        task={item}
+        title={item.title}
+        status={item.status}
+        handleShowTaskSnapPress={handleShowTaskSnapPress}
+        setSelectedTask={setSelectedTask}
+      />
+    );
   };
 
   return (
@@ -59,24 +58,20 @@ export default function DailyTasksScreen() {
         renderItem={renderTasks}
         showsVerticalScrollIndicator={false}
       />
-      <TouchableOpacity activeOpacity={0.7} onPress={() => handleSnapPress(0)}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => handleAddTaskSnapPress(0)}
+      >
         <View style={styles.addButton}>
           <IconEntypo name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>
-      <BottomSheet
-        index={-1}
-        ref={bottomSheetRef}
-        snapPoints={snapPoints}
-        onChange={handleSheetChange}
-        onClose={() => setAddTaskOpen(false)}
-        enablePanDownToClose
-        detached
-      >
-        <BottomSheetView>
-          <AddTask />
-        </BottomSheetView>
-      </BottomSheet>
+      <CustomBottomSheet bottomSheetRef={addTaskRef} title="Add Task">
+        <AddTask dateDisabled={true} />
+      </CustomBottomSheet>
+      <CustomBottomSheet bottomSheetRef={showTaskRef} title="Title Task">
+        <Text>Sushant Pandey</Text>
+      </CustomBottomSheet>
     </View>
   );
 }

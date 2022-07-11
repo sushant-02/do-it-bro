@@ -30,10 +30,10 @@ class Daily(models.Model):
 
 class Task(models.Model):
   STATUS_CHOICES = (
-    ('TODO', 'ToDo'),
-    ('IN_PROGRESS', 'In Progress'),
-    ('COMPLETED', 'Completed'),
-    ('DUE', 'Due'),
+    ('todo', 'todo'),
+    ('inProgress', 'inProgress'),
+    ('complete', 'complete'),
+    ('due', 'due'),
   )
 
   project = models.ForeignKey(

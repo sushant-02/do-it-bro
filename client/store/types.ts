@@ -1,3 +1,5 @@
+import { TaskItemType } from "../types";
+
 export interface OTPSlice {
   email: string;
   otpLoading: boolean;
@@ -20,4 +22,10 @@ export interface AuthSlice {
   setTokens: (refreshToken: string, accessToken: string) => void;
   user: any;
   getUser: () => Awaited<Promise<any>>;
+}
+
+export interface DailyTasksSlice {
+  dailyTasks: TaskItemType[];
+  tasksLoading: boolean;
+  getDailyTasks: () => Awaited<Promise<any>>;
 }

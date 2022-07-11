@@ -1,38 +1,28 @@
 import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextStyle,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { CheckBox } from "@rneui/themed";
 
 import { TaskItemType } from "../types";
 import { statusColors } from "../constants/statusColor";
+import { camelCaseToTitleCase, formatDateTime } from "../utils/commonUtils";
 
 interface TaskCardProps {
   task: TaskItemType;
-  title: string;
-  status: "complete" | "due" | "inProgress" | "todo";
   handleShowTaskSnapPress?: (index: any) => void;
   setSelectedTask?: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const camelCaseToTitleCase = (text: string) => {
-  const result = text.replace(/([A-Z])/g, " $1");
-  const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-  return finalResult;
-};
-
 const TaskCard: React.FC<TaskCardProps> = ({
   task,
-  title,
-  status,
   handleShowTaskSnapPress,
   setSelectedTask,
 }) => {
   const [checked, setChecked] = useState(false);
+
+  const startTimeDateObject = new Date(
+    `${task?.start_date}T${task?.start_time}`
+  );
+  const dueTimeDateObject = new Date(`${task?.due_date}T${task?.due_time}`);
 
   return (
     <>
@@ -67,11 +57,14 @@ const TaskCard: React.FC<TaskCardProps> = ({
           </View>
           <View style={styles.detailContainer}>
             <Text style={styles.title}>{task?.title}</Text>
-            <Text style={styles.date}>9:00 AM - 10:30 PM</Text>
+            <Text style={styles.date}>
+              {formatDateTime(startTimeDateObject, "hh:mm A")} -{" "}
+              {formatDateTime(dueTimeDateObject, "hh:mm A")}
+            </Text>
           </View>
           <View>
-            <Text style={[styles.status, statusColors[status]]}>
-              {camelCaseToTitleCase(status)}
+            <Text style={[styles.status, statusColors[task?.status]]}>
+              {camelCaseToTitleCase(task?.status)}
             </Text>
           </View>
         </TouchableOpacity>

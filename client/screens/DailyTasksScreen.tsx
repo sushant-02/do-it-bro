@@ -15,7 +15,7 @@ import CustomBottomSheet from "../components/CustomBottomSheet";
 import TaskCard from "../components/TaskCard";
 import AddTask from "../components/AddTask";
 import { TaskItemType } from "../types";
-import { tasks } from "../constants/tasks";
+import useStore from "../store";
 
 function IconEntypo(props: {
   name: React.ComponentProps<typeof Entypo>["name"];
@@ -27,7 +27,11 @@ function IconEntypo(props: {
 
 export default function DailyTasksScreen() {
   const [selectedTask, setSelectedTask] = useState(null);
+
+  const dailyTasks = useStore((state) => state.dailyTasks);
+
   const tabBarHeight = useBottomTabBarHeight();
+
   const addTaskRef = useRef<BottomSheet>(null);
   const showTaskRef = useRef<BottomSheet>(null);
 
@@ -54,7 +58,7 @@ export default function DailyTasksScreen() {
   return (
     <View style={[styles.container, { marginBottom: tabBarHeight }]}>
       <FlatList
-        data={tasks}
+        data={dailyTasks}
         renderItem={renderTasks}
         showsVerticalScrollIndicator={false}
       />

@@ -24,8 +24,7 @@ import DailyProgressCard from "../components/DailyProgressCard";
 import ProjectCardOne from "../components/ProjectCardOne";
 import TaskCard from "../components/TaskCard";
 
-import { ProjectsItemType } from "../types";
-import { tasks } from "../constants/tasks";
+import { ProjectsItemType, TaskItemType } from "../types";
 import { projects } from "../constants/projects";
 import { dayNames } from "../constants/dateTime";
 import { monthNames } from "../constants/dateTime";
@@ -37,15 +36,18 @@ import handleLogout from "../utils/handleLogout";
 
 const { width: windowWidth } = Dimensions.get("window");
 
-// SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync();
 
 export default function HomeScreen() {
   const [time, setTime] = useState<any>(null);
   const [renderContent, setRenderContent] = useState<boolean>(false);
+
   const setSafeAreaHeight = useStore((state) => state.setSafeAreaHeight);
   const safeAreaHeight = useStore((state) => state.safeAreaHeight);
   const user = useStore((state) => state.user);
   const getUser = useStore((state) => state.getUser);
+  const dailyTasks = useStore((state) => state.dailyTasks);
+  const getDailyTasks = useStore((state) => state.getDailyTasks);
 
   setStatusBarBackgroundColor("#EFF0F3", false);
   setStatusBarStyle("dark");
@@ -58,6 +60,8 @@ export default function HomeScreen() {
       try {
         // Keep the splash screen visible while we fetch resources
         await getUser();
+        await getDailyTasks();
+
         setRenderContent(true);
         await SplashScreen.hideAsync();
       } catch (err) {
@@ -87,7 +91,7 @@ export default function HomeScreen() {
     });
   }, []);
 
-  const renderTasks = tasks.map((item, index) => {
+  const renderTasks = dailyTasks?.map((item, index) => {
     return (
       <TaskCard
         task={item}

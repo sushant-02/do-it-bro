@@ -48,7 +48,12 @@ export type BottomTabTypes = {
 // Task
 
 export interface TaskItemType {
+  id: number;
   title: string;
+  start_date: string;
+  start_time: string;
+  due_date: string;
+  due_time: string;
   status: "complete" | "due" | "inProgress" | "todo";
 }
 

@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,9 +12,10 @@ class DailyTask(APIView):
 
   def get(self, request):
     user = request.user
+    date = datetime.date(datetime.today())  # Today's date (UTC)
 
     try:
-      daily = Daily.objects.get(user=user)
+      daily = Daily.objects.get(user=user, date=date)
     except Exception as e:
       return Response({'error': str(e), 'message': 'Internal Server Error! Please try in sometime'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

@@ -6,7 +6,7 @@ from .models import Task, Daily
 class TaskSerializer(serializers.ModelSerializer):
   class Meta:
     model = Task
-    fields = ('title', )
+    fields = '__all__'
 
 
 class DailySerializer(serializers.ModelSerializer):

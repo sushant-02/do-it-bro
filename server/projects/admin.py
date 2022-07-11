@@ -11,5 +11,15 @@ class DailyAdmin(admin.ModelAdmin):
     return obj.get_user_name()
 
 
-admin.site.register([Project, Task])
+class TaskAdmin(admin.ModelAdmin):
+  list_display = ('title', 'start_date', 'start_time',
+                  'due_date', 'due_time', 'is_daily')
+
+  @admin.display(boolean=True)
+  def is_daily(self, obj):
+    return obj.daily is not None
+
+
+admin.site.register(Project)
 admin.site.register(Daily, DailyAdmin)
+admin.site.register(Task, TaskAdmin)

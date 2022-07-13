@@ -15,10 +15,11 @@ class DailyTask(APIView):
     date = datetime.date(datetime.today())  # Today's date (UTC)
 
     try:
-      daily = Daily.objects.get(user=user, date=date)
+      daily, created = Daily.objects.get_or_create(user=user, date=date)
     except Exception as e:
       return Response({'error': str(e), 'message': 'Internal Server Error! Please try in sometime'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    print(daily)
     serializer = DailySerializer(instance=daily)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -46,7 +46,7 @@ class Task(models.Model):
   due_date = models.DateField()
   due_time = models.TimeField()
   status = models.CharField(
-    max_length=16, choices=STATUS_CHOICES, default='TODO')
+    max_length=16, choices=STATUS_CHOICES, default='todo')
 
   def __str__(self) -> str:
     return self.title

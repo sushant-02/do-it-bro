@@ -5,15 +5,18 @@ import {
   FlatList,
   TouchableOpacity,
   Text,
+  Image,
+  Dimensions,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { useFonts, Poppins_400Regular } from "@expo-google-fonts/poppins";
 
 import CustomBottomSheet from "../components/CustomBottomSheet";
-
 import TaskCard from "../components/TaskCard";
 import AddTask from "../components/AddTask";
+
 import { TaskItemType } from "../types";
 import useStore from "../store";
 
@@ -26,6 +29,10 @@ function IconEntypo(props: {
 }
 
 export default function DailyTasksScreen() {
+  const [fontLoaded, error] = useFonts({
+    Poppins_400Regular,
+  });
+
   const [selectedTask, setSelectedTask] = useState(null);
 
   const dailyTasks = useStore((state) => state.dailyTasks);
@@ -47,8 +54,6 @@ export default function DailyTasksScreen() {
     return (
       <TaskCard
         task={item}
-        title={item.title}
-        status={item.status}
         handleShowTaskSnapPress={handleShowTaskSnapPress}
         setSelectedTask={setSelectedTask}
       />
@@ -57,11 +62,38 @@ export default function DailyTasksScreen() {
 
   return (
     <View style={[styles.container, { marginBottom: tabBarHeight }]}>
-      <FlatList
-        data={dailyTasks}
-        renderItem={renderTasks}
-        showsVerticalScrollIndicator={false}
-      />
+      {dailyTasks.length > 0 ? (
+        <>
+          <FlatList
+            data={dailyTasks}
+            renderItem={renderTasks}
+            showsVerticalScrollIndicator={false}
+          />
+        </>
+      ) : (
+        <View style={styles.zeroStateContainer}>
+          <Image
+            source={require("../assets/daily-tasks-zero-state.png")}
+            style={styles.zeroStateImage}
+          />
+          {fontLoaded && (
+            <Text
+              style={[
+                styles.zeroStateText,
+                { fontFamily: "Poppins_400Regular" },
+              ]}
+            >
+              Start your day by adding a task
+            </Text>
+          )}
+        </View>
+      )}
+      <CustomBottomSheet bottomSheetRef={addTaskRef} title="Add Task">
+        <AddTask dateDisabled={true} />
+      </CustomBottomSheet>
+      <CustomBottomSheet bottomSheetRef={showTaskRef} title="Title Task">
+        <Text>Sushant Pandey</Text>
+      </CustomBottomSheet>
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => handleAddTaskSnapPress(0)}
@@ -70,12 +102,6 @@ export default function DailyTasksScreen() {
           <IconEntypo name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>
-      <CustomBottomSheet bottomSheetRef={addTaskRef} title="Add Task">
-        <AddTask dateDisabled={true} />
-      </CustomBottomSheet>
-      <CustomBottomSheet bottomSheetRef={showTaskRef} title="Title Task">
-        <Text>Sushant Pandey</Text>
-      </CustomBottomSheet>
     </View>
   );
 }
@@ -110,5 +136,20 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
     elevation: 5,
+  },
+  zeroStateContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  zeroStateImage: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+  },
+  zeroStateText: {
+    marginTop: 20,
+    fontSize: 15,
+    textAlign: "center",
   },
 });

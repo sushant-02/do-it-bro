@@ -38,8 +38,6 @@ export default function ProfileScreen() {
 
   const navigation = useNavigation();
 
-  console.log(user);
-
   useEffect(() => {
     return () => {
       setIsLoggingOut(false);

@@ -4,37 +4,49 @@ import { Button } from "@rneui/themed";
 
 import DateTimeInput from "./DateTimeInput";
 import handleError from "../utils/handleError";
-import { verifyDateTime } from "../utils/commonUtils";
+import { formatDateTime, verifyDateTime } from "../utils/commonUtils";
 
 import useStore from "../store";
+import handleSuccess from "../utils/handleSuccess";
 
 interface AddTaskProps {
   dateDisabled: boolean;
+  handleClosePress?: () => void;
 }
 
-const AddTask: React.FC<AddTaskProps> = ({ dateDisabled }) => {
-  const [title, setTitle] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [dueDate, setDueDate] = useState(new Date());
-  const [dueTime, setDueTime] = useState(new Date());
+const AddTask: React.FC<AddTaskProps> = ({
+  dateDisabled,
+  handleClosePress,
+}) => {
+  const [taskDetails, setTaskDetails] = useState({
+    title: "",
+    startDate: new Date(),
+    startTime: new Date(),
+    dueDate: new Date(),
+    dueTime: new Date(),
+  });
+
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [addingTask, setAddingTask] = useState<boolean>(false);
 
   const safeAreaHeight = useStore((state) => state.safeAreaHeight);
+  const addDailyTask = useStore((state) => state.addDailyTask);
 
-  const onTaskAdd = () => {
-    if (!title.trim().length) {
+  const checkErrors = () => {
+    if (!taskDetails.title.trim().length) {
       setErrorMessage("Task can't be empty");
-      setTitle("");
-      return;
+      setTaskDetails({ ...taskDetails, title: "" });
+      return false;
     }
+
     setErrorMessage("");
     const [isValid, error] = verifyDateTime(
-      startDate,
-      dueDate,
-      startTime,
-      dueTime
+      taskDetails.startDate,
+      taskDetails.dueDate,
+      taskDetails.startTime,
+      taskDetails.dueTime
     );
+
     if (!isValid) {
       let errorMsg =
         error === "invalid-date"
@@ -43,7 +55,31 @@ const AddTask: React.FC<AddTaskProps> = ({ dateDisabled }) => {
           ? "Due time must be greater than start time."
           : "";
       handleError(null, errorMsg, safeAreaHeight);
-      return;
+      return false;
+    }
+
+    return true;
+  };
+
+  const onTaskAdd = async () => {
+    if (checkErrors()) {
+      const requestData = {
+        title: taskDetails.title,
+        start_time: formatDateTime(taskDetails.startTime, "hh:mm:ss"),
+        due_time: formatDateTime(taskDetails.dueTime, "hh:mm:ss"),
+      };
+
+      setAddingTask(true);
+
+      try {
+        await addDailyTask(requestData);
+        if (handleClosePress) handleClosePress();
+        handleSuccess("Daily Task Added!", safeAreaHeight);
+      } catch (err) {
+        handleError(null, null, safeAreaHeight);
+      } finally {
+        setAddingTask(false);
+      }
     }
   };
 
@@ -60,27 +96,37 @@ const AddTask: React.FC<AddTaskProps> = ({ dateDisabled }) => {
           fontSize: 16,
         }}
         placeholder="What's the task"
-        defaultValue={title}
-        onChangeText={(newVal) => setTitle(newVal)}
+        defaultValue={taskDetails.title}
+        onChangeText={(newVal) =>
+          setTaskDetails({ ...taskDetails, title: newVal })
+        }
       />
       <Text style={{ color: "#f44336", marginBottom: 10 }}>{errorMessage}</Text>
       <View style={styles.dateTimeInputContainer}>
         <DateTimeInput
           title="Start Date/Time"
-          curDate={startDate}
-          setCurDate={setStartDate}
-          curTime={startTime}
-          setCurTime={setStartTime}
+          curDate={taskDetails.startDate}
+          setCurDate={(startDate: Date) =>
+            setTaskDetails({ ...taskDetails, startDate })
+          }
+          curTime={taskDetails.startTime}
+          setCurTime={(startTime: Date) =>
+            setTaskDetails({ ...taskDetails, startTime })
+          }
           disabled={dateDisabled}
         />
       </View>
       <View style={styles.dateTimeInputContainer}>
         <DateTimeInput
           title="Due Date/Time"
-          curDate={dueDate}
-          setCurDate={setDueDate}
-          curTime={dueTime}
-          setCurTime={setDueTime}
+          curDate={taskDetails.dueDate}
+          setCurDate={(dueDate: Date) =>
+            setTaskDetails({ ...taskDetails, dueDate })
+          }
+          curTime={taskDetails.dueTime}
+          setCurTime={(dueTime: Date) =>
+            setTaskDetails({ ...taskDetails, dueTime })
+          }
           disabled={dateDisabled}
         />
       </View>
@@ -90,7 +136,7 @@ const AddTask: React.FC<AddTaskProps> = ({ dateDisabled }) => {
         buttonStyle={styles.addTaskButton}
         title="Add Task"
         onPress={onTaskAdd}
-        // loading={otpLoading}
+        loading={addingTask}
       />
     </View>
   );

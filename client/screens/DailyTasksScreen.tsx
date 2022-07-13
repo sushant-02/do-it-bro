@@ -63,7 +63,7 @@ export default function DailyTasksScreen() {
 
   return (
     <View style={[styles.container, { marginBottom: tabBarHeight }]}>
-      {dailyTasks.length > 0 ? (
+      {dailyTasks?.length > 0 ? (
         <>
           <FlatList
             data={dailyTasks}

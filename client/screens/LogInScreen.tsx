@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -66,6 +67,7 @@ const LoginScreen = () => {
   };
 
   const showOTPInput = () => {
+    Keyboard.dismiss();
     scrollViewRef?.current?.scrollToEnd({ animated: true });
   };
 

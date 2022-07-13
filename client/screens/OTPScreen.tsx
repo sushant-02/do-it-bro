@@ -121,8 +121,6 @@ const OTPScreen = () => {
   );
 };
 
-export default OTPScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -179,3 +177,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+export default OTPScreen;

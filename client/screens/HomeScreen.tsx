@@ -3,6 +3,7 @@ import {
   setStatusBarBackgroundColor,
   setStatusBarStyle,
 } from "expo-status-bar";
+import * as SplashScreen from "expo-splash-screen";
 import {
   StyleSheet,
   Text,
@@ -17,8 +18,6 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import * as SplashScreen from "expo-splash-screen";
-import { useNavigation } from "@react-navigation/native";
 
 import DailyProgressCard from "../components/DailyProgressCard";
 import ProjectCardOne from "../components/ProjectCardOne";
@@ -29,7 +28,6 @@ import { projects } from "../constants/projects";
 import { dayNames } from "../constants/dateTime";
 import { monthNames } from "../constants/dateTime";
 
-// State
 import useStore from "../store";
 import PlusCircleDotted from "../utils/svgs/PlusCircleDotted";
 import { splitName } from "../utils/commonUtils";
@@ -96,16 +94,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   }, []);
 
   const renderTasks = dailyTasks?.map((item, index) => {
-    return (
-      <>
-        <TaskCard task={item} key={index} />
-      </>
-    );
+    return <TaskCard task={item} key={index} />;
   });
 
   const renderProjects = (item: ProjectsItemType, index: number) => {
     return (
-      <View style={{ marginVertical: 8 }}>
+      <View style={{ marginVertical: 8 }} key={index}>
         <ProjectCardOne
           title={item.title}
           totalTasks={item.totalTasks}
@@ -139,7 +133,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           <>
             <View style={styles.projectHeader}>
               <Text style={styles.heading}>In Progress</Text>
-              <TouchableOpacity activeOpacity={0.7}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  navigation.jumpTo("Projects");
+                }}
+              >
                 <Text style={styles.viewAll}>View All</Text>
               </TouchableOpacity>
             </View>

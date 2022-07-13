@@ -80,8 +80,6 @@ const GetOTPButton: React.FC<GetOTPButtonProps> = ({
   );
 };
 
-export default GetOTPButton;
-
 const styles = StyleSheet.create({
   emailContainer: {
     width: width,
@@ -99,3 +97,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+export default GetOTPButton;

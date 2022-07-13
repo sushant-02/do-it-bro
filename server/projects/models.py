@@ -32,21 +32,6 @@ class Daily(models.Model):
     return f'{self.user.first_name.capitalize()}'
 
 
-class Daily(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  date = models.DateField()
-
-  class Meta:
-    verbose_name = 'Daily'
-    verbose_name_plural = 'Daily'
-
-  def __str__(self) -> str:
-    return f'{self.user.first_name.capitalize()} ({self.date.strftime("%d/%m/%Y")})'
-
-  def get_user_name(self) -> str:
-    return f'{self.user.first_name.capitalize()}'
-
-
 class Task(models.Model):
   STATUS_CHOICES = (
     ('todo', 'todo'),

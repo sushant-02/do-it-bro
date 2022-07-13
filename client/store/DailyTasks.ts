@@ -38,6 +38,36 @@ const createDailyTasksSlice: StateCreator<DailyTasksSlice> = (
       set((state) => ({ ...state, tasksLoading: false }));
     }
   },
+  addDailyTask: async (requestData: any) => {
+    // @ts-ignore
+    let { safeAreaHeight, accessToken } = getState();
+
+    if (!accessToken) {
+      const [tokens]: any = await loadTokensToState();
+      accessToken = tokens.access;
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    try {
+      const { data } = await doItBroAPI.post("daily/", requestData, config);
+      set((state) => ({
+        ...state,
+        dailyTasks: [data.task, ...state.dailyTasks],
+      }));
+
+      return new Promise((resolve) => resolve(true));
+    } catch (err: any) {
+      handleError(err, null, safeAreaHeight);
+      return new Promise((_resolve, reject) => reject(false));
+    } finally {
+      set((state) => ({ ...state, tasksLoading: false }));
+    }
+  },
 });
 
 export default createDailyTasksSlice;

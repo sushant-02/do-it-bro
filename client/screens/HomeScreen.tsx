@@ -29,6 +29,7 @@ import { dayNames } from "../constants/dateTime";
 import { monthNames } from "../constants/dateTime";
 
 import useStore from "../store";
+import PlusCircleDotted from "../utils/svgs/PlusCircleDotted";
 import { splitName } from "../utils/commonUtils";
 import handleLogout from "../utils/handleLogout";
 
@@ -51,9 +52,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const dailyTasks = useStore((state) => state.dailyTasks);
   const getDailyTasks = useStore((state) => state.getDailyTasks);
 
+  const tabBarHeight = useBottomTabBarHeight();
+
   setStatusBarBackgroundColor("#EFF0F3", false);
   setStatusBarStyle("dark");
-  const tabBarHeight = useBottomTabBarHeight();
 
   useEffect(() => {
     async function prepare() {
@@ -91,8 +93,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     });
   }, []);
 
-  const renderTasks = dailyTasks?.map((item, index) => {
-    return <TaskCard task={item} key={index} />;
+  const renderTasks = dailyTasks?.map((item: TaskItemType) => {
+    return <TaskCard task={item} key={item?.id} />;
   });
 
   const renderProjects = (item: ProjectsItemType, index: number) => {
@@ -159,7 +161,19 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
           <>
             <Text style={styles.heading}>Today's Tasks</Text>
-            {renderTasks}
+            {dailyTasks?.length > 0 ? (
+              renderTasks
+            ) : (
+              <View
+                style={{
+                  height: 200,
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <PlusCircleDotted navigation={navigation} />
+              </View>
+            )}
           </>
         </ScrollView>
       )}

@@ -10,8 +10,12 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class DailySerializer(serializers.ModelSerializer):
-  tasks = TaskSerializer(many=True)
+  tasks = serializers.SerializerMethodField()
 
   class Meta:
     model = Daily
     fields = ('user', 'date', 'tasks')
+
+  def get_tasks(self, instance):
+    all_tasks = instance.tasks.all().order_by('-updated_at')
+    return TaskSerializer(all_tasks, many=True).data

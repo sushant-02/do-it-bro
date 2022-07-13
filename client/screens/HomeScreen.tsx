@@ -12,13 +12,13 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
+import { useNavigation } from "@react-navigation/native";
 
 import DailyProgressCard from "../components/DailyProgressCard";
 import ProjectCardOne from "../components/ProjectCardOne";
@@ -31,6 +31,7 @@ import { monthNames } from "../constants/dateTime";
 
 // State
 import useStore from "../store";
+import PlusCircleDotted from "../utils/svgs/PlusCircleDotted";
 import { splitName } from "../utils/commonUtils";
 import handleLogout from "../utils/handleLogout";
 
@@ -38,7 +39,11 @@ const { width: windowWidth } = Dimensions.get("window");
 
 SplashScreen.preventAutoHideAsync();
 
-export default function HomeScreen() {
+interface HomeScreenProps {
+  navigation: any;
+}
+
+const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [time, setTime] = useState<any>(null);
   const [renderContent, setRenderContent] = useState<boolean>(false);
 
@@ -49,11 +54,10 @@ export default function HomeScreen() {
   const dailyTasks = useStore((state) => state.dailyTasks);
   const getDailyTasks = useStore((state) => state.getDailyTasks);
 
-  setStatusBarBackgroundColor("#EFF0F3", false);
-  setStatusBarStyle("dark");
   const tabBarHeight = useBottomTabBarHeight();
 
-  const navigation = useNavigation();
+  setStatusBarBackgroundColor("#EFF0F3", false);
+  setStatusBarStyle("dark");
 
   useEffect(() => {
     async function prepare() {
@@ -93,12 +97,9 @@ export default function HomeScreen() {
 
   const renderTasks = dailyTasks?.map((item, index) => {
     return (
-      <TaskCard
-        task={item}
-        key={index}
-        title={item.title}
-        status={item.status}
-      />
+      <>
+        <TaskCard task={item} key={index} />
+      </>
     );
   });
 
@@ -161,14 +162,25 @@ export default function HomeScreen() {
 
           <>
             <Text style={styles.heading}>Today's Tasks</Text>
-            {/* <FlatList data={tasks} renderItem={renderTasks} /> */}
-            {renderTasks}
+            {dailyTasks.length > 0 ? (
+              renderTasks
+            ) : (
+              <View
+                style={{
+                  height: 200,
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <PlusCircleDotted navigation={navigation} />
+              </View>
+            )}
           </>
         </ScrollView>
       )}
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -207,3 +219,5 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
+
+export default HomeScreen;

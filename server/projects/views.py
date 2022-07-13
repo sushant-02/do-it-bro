@@ -28,7 +28,8 @@ class DailyTask(APIView):
 
     # Check whether daily data exists for the user for current date, if not create one
     try:
-      daily_obj, created = Daily.objects.get_or_create(user=user, date=date)
+      daily_obj, created = Daily.objects.get_or_create(
+        user=user, date=date)
     except Exception as e:
       return Response({'error': 'Cannot get or create Daily model object', 'message': 'Unable to add task, please try again later!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -46,7 +47,6 @@ class DailyTask(APIView):
       return Response({'task': serializer.data}, status=status.HTTP_201_CREATED)
     except Exception as e:
       if serializer.errors:
-        print(serializer.errors)
         return Response({'error': serializer.errors, 'message': 'Something went wrong. Please try again in sometime'}, status=status.HTTP_400_BAD_REQUEST)
       return Response({'error': str(e), 'message': 'Internal Server Error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

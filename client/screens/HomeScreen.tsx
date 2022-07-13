@@ -93,12 +93,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
   const renderTasks = dailyTasks?.map((item, index) => {
     return (
-      <TaskCard
-        task={item}
-        key={index}
-        title={item.title}
-        status={item.status}
-      />
+      <>
+        <TaskCard task={item} />
+      </>
     );
   });
 
@@ -166,7 +163,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
           <>
             <Text style={styles.heading}>Today's Tasks</Text>
-            {/* <FlatList data={tasks} renderItem={renderTasks} /> */}
             {renderTasks}
           </>
         </ScrollView>

@@ -3,6 +3,7 @@ import {
   setStatusBarBackgroundColor,
   setStatusBarStyle,
 } from "expo-status-bar";
+import * as SplashScreen from "expo-splash-screen";
 import {
   StyleSheet,
   Text,
@@ -12,13 +13,11 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import * as SplashScreen from "expo-splash-screen";
 
 import DailyProgressCard from "../components/DailyProgressCard";
 import ProjectCardOne from "../components/ProjectCardOne";
@@ -29,7 +28,6 @@ import { projects } from "../constants/projects";
 import { dayNames } from "../constants/dateTime";
 import { monthNames } from "../constants/dateTime";
 
-// State
 import useStore from "../store";
 import { splitName } from "../utils/commonUtils";
 import handleLogout from "../utils/handleLogout";
@@ -38,7 +36,11 @@ const { width: windowWidth } = Dimensions.get("window");
 
 SplashScreen.preventAutoHideAsync();
 
-export default function HomeScreen() {
+interface HomeScreenProps {
+  navigation: any;
+}
+
+const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [time, setTime] = useState<any>(null);
   const [renderContent, setRenderContent] = useState<boolean>(false);
 
@@ -52,8 +54,6 @@ export default function HomeScreen() {
   setStatusBarBackgroundColor("#EFF0F3", false);
   setStatusBarStyle("dark");
   const tabBarHeight = useBottomTabBarHeight();
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     async function prepare() {
@@ -138,7 +138,12 @@ export default function HomeScreen() {
           <>
             <View style={styles.projectHeader}>
               <Text style={styles.heading}>In Progress</Text>
-              <TouchableOpacity activeOpacity={0.7}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  navigation.jumpTo("Projects");
+                }}
+              >
                 <Text style={styles.viewAll}>View All</Text>
               </TouchableOpacity>
             </View>
@@ -168,7 +173,7 @@ export default function HomeScreen() {
       )}
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -207,3 +212,5 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
+
+export default HomeScreen;

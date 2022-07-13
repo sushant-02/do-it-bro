@@ -1,9 +1,9 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, cloneElement } from "react";
 import { Text, StyleSheet } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 interface CustomBottomSheetProps {
-  children: React.ReactNode;
+  children: React.ReactElement<any, string>;
   bottomSheetRef: React.RefObject<BottomSheet>;
   title: string;
 }
@@ -23,9 +23,9 @@ const CustomBottomSheet: React.FC<CustomBottomSheetProps> = ({
   //   bottomSheetRef.current?.snapToIndex(index);
   // }, []);
 
-  // const handleClosePress = useCallback(() => {
-  //   bottomSheetRef.current?.close();
-  // }, []);
+  const handleClosePress = useCallback(() => {
+    bottomSheetRef.current?.close();
+  }, []);
 
   return (
     <>
@@ -41,7 +41,7 @@ const CustomBottomSheet: React.FC<CustomBottomSheetProps> = ({
       >
         <BottomSheetScrollView>
           <Text style={styles.sheetTitle}>{title}</Text>
-          {children}
+          {cloneElement(children, { handleClosePress })}
         </BottomSheetScrollView>
       </BottomSheet>
     </>

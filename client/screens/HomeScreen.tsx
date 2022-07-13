@@ -93,8 +93,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     });
   }, []);
 
-  const renderTasks = dailyTasks?.map((item, index) => {
-    return <TaskCard task={item} key={index} />;
+  const renderTasks = dailyTasks?.map((item: TaskItemType) => {
+    return <TaskCard task={item} key={item?.id} />;
   });
 
   const renderProjects = (item: ProjectsItemType, index: number) => {
@@ -161,7 +161,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
           <>
             <Text style={styles.heading}>Today's Tasks</Text>
-            {dailyTasks.length > 0 ? (
+            {dailyTasks?.length > 0 ? (
               renderTasks
             ) : (
               <View

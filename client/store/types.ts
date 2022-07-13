@@ -28,4 +28,5 @@ export interface DailyTasksSlice {
   dailyTasks: TaskItemType[];
   tasksLoading: boolean;
   getDailyTasks: () => Awaited<Promise<any>>;
+  addDailyTask: (requestData: any) => Awaited<Promise<any>>;
 }

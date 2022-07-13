@@ -92,16 +92,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   }, []);
 
   const renderTasks = dailyTasks?.map((item, index) => {
-    return (
-      <>
-        <TaskCard task={item} />
-      </>
-    );
+    return <TaskCard task={item} key={index} />;
   });
 
   const renderProjects = (item: ProjectsItemType, index: number) => {
     return (
-      <View style={{ marginVertical: 8 }}>
+      <View style={{ marginVertical: 8 }} key={index}>
         <ProjectCardOne
           title={item.title}
           totalTasks={item.totalTasks}

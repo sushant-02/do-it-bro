@@ -16,6 +16,7 @@ import { useFonts, Poppins_400Regular } from "@expo-google-fonts/poppins";
 import CustomBottomSheet from "../components/CustomBottomSheet";
 import TaskCard from "../components/TaskCard";
 import AddTask from "../components/AddTask";
+import ViewTask from "../components/ViewTask";
 
 import { TaskItemType } from "../types";
 import useStore from "../store";
@@ -33,7 +34,7 @@ export default function DailyTasksScreen() {
     Poppins_400Regular,
   });
 
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState<TaskItemType>(null);
 
   const dailyTasks = useStore((state) => state.dailyTasks);
 
@@ -88,12 +89,15 @@ export default function DailyTasksScreen() {
           )}
         </View>
       )}
+
       <CustomBottomSheet bottomSheetRef={addTaskRef} title="Add Task">
         <AddTask dateDisabled={true} />
       </CustomBottomSheet>
-      <CustomBottomSheet bottomSheetRef={showTaskRef} title="Title Task">
-        <Text>Sushant Pandey</Text>
+
+      <CustomBottomSheet bottomSheetRef={showTaskRef} title="Task">
+        <ViewTask task={selectedTask} />
       </CustomBottomSheet>
+
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => handleAddTaskSnapPress(0)}

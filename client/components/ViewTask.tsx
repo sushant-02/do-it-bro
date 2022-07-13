@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { TextInput, View, Text, StyleSheet } from "react-native";
-import { Button } from "@rneui/themed";
+import { Input, Button } from "@rneui/themed";
 
 import DateTimeInput from "./DateTimeInput";
 import handleError from "../utils/handleError";
-import { verifyDateTime } from "../utils/commonUtils";
+import { verifyDateTime, camelCaseToTitleCase } from "../utils/commonUtils";
+import { statusColors } from "../constants/statusColor";
 
 import useStore from "../store";
+import { TaskItemType } from "../types";
 
 interface ViewTaskProps {
-  dateDisabled: boolean;
+  task: TaskItemType;
 }
 
-const ViewTask: React.FC<ViewTaskProps> = ({ dateDisabled }) => {
+const ViewTask: React.FC<ViewTaskProps> = ({ task }) => {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
@@ -48,9 +50,18 @@ const ViewTask: React.FC<ViewTaskProps> = ({ dateDisabled }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text>Task Screen</Text>
-    </View>
+    <>
+      {task && (
+        <View style={styles.container}>
+          <View style={styles.statusContainer}>
+            <Text style={[styles.status, statusColors[task?.status]]}>
+              {camelCaseToTitleCase(task?.status)}
+            </Text>
+          </View>
+          <Text style={styles.task}>{task?.title}</Text>
+        </View>
+      )}
+    </>
   );
 };
 
@@ -58,25 +69,18 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
   },
-  label: {
+  task: {
     fontSize: 17,
-    fontWeight: "500",
-    marginBottom: 8,
   },
-  dateTimeInputContainer: {
-    marginBottom: 20,
+  statusContainer: {
+    alignSelf: "flex-start",
+    marginBottom: 10,
   },
-  addTaskButtonContainer: {
-    marginTop: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  addTaskButton: {
-    backgroundColor: "#5872EB",
-    width: "100%",
+  status: {
+    padding: 5,
+    paddingHorizontal: 7,
     borderRadius: 10,
-    paddingVertical: 9,
-    paddingHorizontal: 30,
+    textTransform: "capitalize",
   },
 });
 

@@ -1,4 +1,11 @@
-export const statusColors = {
+interface StatusColorsType {
+  complete: any;
+  todo: any;
+  inProgress: any;
+  due: any;
+}
+
+export const statusColors: StatusColorsType = {
   complete: {
     backgroundColor: "#DFF5F1",
     color: "#59C2C4",

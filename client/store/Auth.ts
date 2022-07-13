@@ -2,7 +2,6 @@ import { StateCreator } from "zustand";
 
 import doItBroAPI from "../api/doItBro";
 import { loadTokensToState } from "../utils/commonUtils";
-import handleError from "../utils/handleError";
 import { AuthSlice } from "./types";
 
 const createAuthSlice: StateCreator<AuthSlice> = (set, getState) => ({

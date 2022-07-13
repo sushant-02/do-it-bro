@@ -1,4 +1,4 @@
-// Navigation Types
+// Navigation
 
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
@@ -25,6 +25,7 @@ export type RootStackParamList = {
   Onboarding: undefined;
   OTP: undefined;
   LogIn: undefined;
+  // Projects: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -39,7 +40,31 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type BottomTabTypes = {
   name: keyof RootTabParamList;
   title: string;
-  component: () => JSX.Element;
+  component: () => JSX.Element | null;
   icon: (color: string) => JSX.Element;
   hideHeader?: boolean;
+  alignCenter?: boolean;
 };
+
+// Task
+
+export interface TaskItemInterface {
+  id: number;
+  title: string;
+  start_date: string;
+  start_time: string;
+  due_date: string;
+  due_time: string;
+  status: "complete" | "due" | "inProgress" | "todo";
+}
+
+export type TaskItemType = TaskItemInterface | null;
+
+// Projects
+
+export interface ProjectsItemType {
+  title: string;
+  totalTasks: number;
+  completedTasks: number;
+  addButton?: boolean;
+}

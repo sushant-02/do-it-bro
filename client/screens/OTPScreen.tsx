@@ -70,7 +70,7 @@ const OTPScreen = () => {
         routes: [{ name: "Root" }],
       });
     } catch (err: any) {
-      handleError(err, safeAreaHeight);
+      handleError(err, null, safeAreaHeight);
     } finally {
       setLoading(false);
     }
@@ -120,8 +120,6 @@ const OTPScreen = () => {
     </View>
   );
 };
-
-export default OTPScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -179,3 +177,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+export default OTPScreen;

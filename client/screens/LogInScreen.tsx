@@ -87,7 +87,7 @@ const LoginScreen = () => {
         routes: [{ name: "Root" }],
       });
     } catch (err: any) {
-      handleError(err, safeAreaHeight);
+      handleError(err, null, safeAreaHeight);
     } finally {
       setLoading(false);
     }
@@ -175,8 +175,6 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -239,3 +237,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+export default LoginScreen;

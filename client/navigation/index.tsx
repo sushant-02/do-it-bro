@@ -54,6 +54,7 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{
+        tabBarHideOnKeyboard: true,
         headerStyle: {
           backgroundColor: "#EFF0F3",
         },
@@ -83,6 +84,8 @@ function BottomTabNavigator() {
               title: tab.title,
               tabBarIcon: ({ color }) => tab.icon(color),
               headerShown: !tab.hideHeader,
+              headerTitleAlign: tab.alignCenter ? "center" : "left",
+              headerTitleStyle: { fontWeight: "900" },
             }}
           />
         );

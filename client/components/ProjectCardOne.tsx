@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 
 import ProgressBar from "./ProgressBar";
@@ -15,6 +8,7 @@ interface ProjectCardProps {
   totalTasks: number;
   completedTasks: number;
   addButton?: boolean;
+  width: string | number;
 }
 
 function IconEntypo(props: {
@@ -25,20 +19,19 @@ function IconEntypo(props: {
   return <Entypo {...props} />;
 }
 
-const { width: windowWidth } = Dimensions.get("window");
-
 const ProjectCard: React.FC<ProjectCardProps> = ({
   title,
   totalTasks,
   completedTasks,
   addButton,
+  width,
 }) => {
   return (
     <>
       {addButton && (
         <TouchableOpacity
           activeOpacity={0.7}
-          style={[styles.container, styles.buttonContainer]}
+          style={[styles.container, styles.buttonContainer, { width }]}
         >
           <View style={styles.addButton}>
             <IconEntypo name="plus" size={30} color="black" />
@@ -46,7 +39,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         </TouchableOpacity>
       )}
       {!addButton && (
-        <TouchableOpacity activeOpacity={0.7} style={styles.container}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[styles.container, { width }]}
+        >
           <View style={styles.imageContainer}>
             <Image
               style={styles.taskIcon}
@@ -57,8 +53,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <Text style={styles.totalTasks}>{totalTasks} Tasks</Text>
           <View style={styles.progressContainer}>
             <ProgressBar
-              step={3}
-              steps={13}
+              step={completedTasks}
+              steps={totalTasks}
               height={7}
               barColor="#DFF5F1"
               progressColor="#59C2C4"
@@ -73,7 +69,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    width: (windowWidth - 2 * 20 - 15) / 2,
     marginRight: 15,
     paddingHorizontal: 18,
     paddingVertical: 18,

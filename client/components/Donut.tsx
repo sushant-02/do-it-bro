@@ -18,6 +18,7 @@ interface DonutProps {
   color: string;
   textColor: string;
   max: number;
+  fontWeight: any;
 }
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
@@ -30,6 +31,7 @@ const Donut: React.FC<DonutProps> = ({
   color = "#69CEF8",
   textColor = "#fff",
   max = 18,
+  fontWeight = "500",
 }) => {
   const animated = useRef(new Animated.Value(0)).current;
   const circleRef = useRef<any>();
@@ -108,16 +110,18 @@ const Donut: React.FC<DonutProps> = ({
         defaultValue="0"
         style={[
           StyleSheet.absoluteFillObject,
-          { fontSize: radius / 2, color: textColor ?? color },
-          styles.text,
+          {
+            fontSize: radius / 2,
+            color: textColor ?? color,
+            fontWeight: fontWeight,
+            textAlign: "center",
+          },
         ]}
       />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  text: { fontWeight: "900", textAlign: "center" },
-});
+const styles = StyleSheet.create({});
 
 export default Donut;

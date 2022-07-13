@@ -28,6 +28,7 @@ const DailyProgressCard: React.FC<DailyProgressCardProps> = ({
           color="#69CEF8"
           textColor="#fff"
           max={totalTasks}
+          fontWeight="900"
         />
       </View>
     </View>

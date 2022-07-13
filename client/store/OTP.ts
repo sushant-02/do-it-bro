@@ -19,7 +19,7 @@ const createOTPSlice: StateCreator<OTPSlice> = (set, getState) => ({
       if (navigate) navigate();
       if (showFlashMessage) showFlashMessage();
     } catch (err: any) {
-      handleError(err, safeAreaHeight);
+      handleError(err, null, safeAreaHeight);
     } finally {
       set((state) => ({ ...state, otpLoading: false }));
     }

@@ -37,13 +37,17 @@ class UserManager(BaseUserManager):
     return self._create_user(email, password, **extra_fields)
 
 
+def get_first_name():
+  return Haikunator.haikunate(0, " ")
+
+
 class User(AbstractUser):
   username = None
   email = models.EmailField(unique=True)
   first_name = models.CharField(
-    max_length=30, default=Haikunator.haikunate(0, ' '))
+    max_length=30, default=get_first_name)
   image_url = models.CharField(max_length=255, blank=True, null=True,
-                               default='https://avatars.dicebear.com/api/bottts/pandeu.svg?scale=97&colors[]=blue')
+                               default='https://avatars.dicebear.com/api/bottts/pandeu.png?scale=97&colors[]=blue')
 
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = []
@@ -53,6 +57,9 @@ class User(AbstractUser):
   class Meta:
     verbose_name = 'User'
     verbose_name_plural = 'Users'
+
+  def __str__(self) -> str:
+    return self.first_name
 
 
 class UserOTPs(models.Model):

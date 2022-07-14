@@ -14,17 +14,19 @@ interface AddTaskProps {
   handleClosePress?: () => void;
 }
 
+const initialTaskDetails = {
+  title: "",
+  startDate: new Date(),
+  startTime: new Date(),
+  dueDate: new Date(),
+  dueTime: new Date(),
+};
+
 const AddTask: React.FC<AddTaskProps> = ({
   dateDisabled,
   handleClosePress,
 }) => {
-  const [taskDetails, setTaskDetails] = useState({
-    title: "",
-    startDate: new Date(),
-    startTime: new Date(),
-    dueDate: new Date(),
-    dueTime: new Date(),
-  });
+  const [taskDetails, setTaskDetails] = useState(initialTaskDetails);
 
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [addingTask, setAddingTask] = useState<boolean>(false);
@@ -74,6 +76,7 @@ const AddTask: React.FC<AddTaskProps> = ({
       try {
         await addDailyTask(requestData);
         if (handleClosePress) handleClosePress();
+        setTaskDetails({ ...initialTaskDetails });
         handleSuccess("Daily Task Added!", safeAreaHeight);
       } catch (err) {
         handleError(null, null, safeAreaHeight);

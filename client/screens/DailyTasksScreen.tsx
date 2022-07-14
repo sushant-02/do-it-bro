@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   Text,
   Image,
-  Dimensions,
 } from "react-native";
+// import { TouchableOpacity } from "react-native-gesture-handler";
 import { Entypo } from "@expo/vector-icons";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -99,12 +99,11 @@ export default function DailyTasksScreen() {
       </CustomBottomSheet>
 
       <TouchableOpacity
+        style={styles.addButton}
         activeOpacity={0.7}
         onPress={() => handleAddTaskSnapPress(0)}
       >
-        <View style={styles.addButton}>
-          <IconEntypo name="plus" size={30} color="white" />
-        </View>
+        <IconEntypo name="plus" size={30} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -131,14 +130,14 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: "#5872EB",
+    position: "absolute",
     width: 50,
     height: 50,
+    bottom: 15,
+    right: 15,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 50,
-    position: "absolute",
-    bottom: 10,
-    right: 10,
     elevation: 5,
   },
   zeroStateContainer: {

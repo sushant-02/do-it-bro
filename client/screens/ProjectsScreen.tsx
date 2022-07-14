@@ -45,10 +45,8 @@ export default function ProjectsScreen() {
         data={projects}
         renderItem={({ item, index }) => renderProjects(item, index)}
       />
-      <TouchableOpacity activeOpacity={0.7}>
-        <View style={styles.addButton}>
-          <IconEntypo name="plus" size={30} color="white" />
-        </View>
+      <TouchableOpacity style={styles.addButton} activeOpacity={0.7}>
+        <IconEntypo name="plus" size={30} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -81,8 +79,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 50,
     position: "absolute",
-    bottom: 10,
-    right: 10,
+    bottom: 15,
+    right: 15,
     elevation: 5,
   },
 });
